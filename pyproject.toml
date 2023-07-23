@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "annotation-checker"
+version = "0.1.0"
+description = "Check that all python files are annotated"
+authors = ["PaulinaPacyna <https://github.com/PaulinaPacyna>"]
+license = "MIT"
+readme = "README.md"
+packages = [{include = "annotation_checker"}]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.4.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

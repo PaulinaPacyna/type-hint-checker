@@ -3,3 +3,4 @@ annotated.egg-info
 build
 .idea
 __pycache__
+/poetry.lock
