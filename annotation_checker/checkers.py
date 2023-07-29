@@ -21,10 +21,7 @@ class Checker(ABC):
 
 
 class FunctionChecker(Checker):
-    def __init__(
-            self,
-            function: ast.FunctionDef, exclude_args: List[str] = ()
-    ):
+    def __init__(self, function: ast.FunctionDef, exclude_args: List[str] = ()):
         super().__init__()
         self.function: ast.FunctionDef = function
         self.exclude_args = exclude_args

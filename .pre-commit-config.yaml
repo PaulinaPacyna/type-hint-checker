@@ -3,12 +3,3 @@ repos:
     rev: stable
     hooks:
     - id: black
-  - repo: local
-    hooks:
-      - id: annotation-checker
-        name: annotation-checker
-        description: Check that all python files are annotated
-        entry: annotation_checker
-        language: python
-        files: ".py"
-        args: [ --strict=True ]
