@@ -27,7 +27,7 @@ def check_annotated(file_list: List[str], exclude_self: bool = False) -> bool:
                     continue
                 number_or_errors = number_or_errors + checker.check()
                 checker.log_results(logger)
-    return bool(number_or_errors)
+    return not bool(number_or_errors)
 
 
 def main():
@@ -38,7 +38,7 @@ def main():
     parser.add_argument("--exclude_self", type=bool, default=False)
     args = parser.parse_args()
     logger.debug("Files: %s", args.filenames)
-    exit_code = check_annotated(args.filenames, exclude_self=args.exclude_self)
+    exit_code = 1 - check_annotated(args.filenames, exclude_self=args.exclude_self)
     if args.strict and exit_code:
         exit(exit_code)
 
