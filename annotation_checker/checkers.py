@@ -5,14 +5,14 @@ from typing import List, Optional
 
 
 class Checker(ABC):
-    def __init__(self):
+    def __init__(self) -> None:
         self.errors = []
 
     @abstractmethod
-    def check(self):
+    def check(self) -> bool:
         pass
 
-    def log_results(self, logger: Logger, filename: Optional[str] = None):
+    def log_results(self, logger: Logger, filename: Optional[str] = None) -> None:
         prefix = ""
         if filename:
             prefix = f"{filename}: "
@@ -21,7 +21,7 @@ class Checker(ABC):
 
 
 class FunctionChecker(Checker):
-    def __init__(self, function: ast.FunctionDef, exclude_args: List[str] = ()):
+    def __init__(self, function: ast.FunctionDef, exclude_args: List[str] = ()) -> None:
         super().__init__()
         self.function: ast.FunctionDef = function
         self.exclude_args = exclude_args
@@ -40,7 +40,7 @@ class FunctionChecker(Checker):
                         f"(function {self.function.name}), line {self.function.lineno}"
                     )
 
-    def __check_return(self):
+    def __check_return(self) -> None:
         if not self.function.returns:
             self.errors.append(
                 f"Missing return annotation for function {self.function.name}, "
@@ -49,12 +49,12 @@ class FunctionChecker(Checker):
 
 
 class ClassChecker(Checker):
-    def __init__(self, class_: ast.ClassDef, exclude_args: List[str] = ()):
+    def __init__(self, class_: ast.ClassDef, exclude_args: List[str] = ()) -> None:
         super().__init__()
         self.exclude_args = exclude_args
         self.class_ = class_
 
-    def check(self):
+    def check(self) -> bool:
         result = False
         for method in self.class_.body:
             if isinstance(method, ast.FunctionDef):

@@ -30,7 +30,7 @@ def check_annotated(file_list: List[str], exclude_self: bool = False) -> bool:
     return not bool(number_or_errors)
 
 
-def main():
+def main() -> None:
     logger.setLevel(logging.INFO)
     parser = argparse.ArgumentParser()
     parser.add_argument("filenames", nargs="+")
