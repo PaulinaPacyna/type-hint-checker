@@ -12,15 +12,15 @@ Checks that arguments in functions and methods are annotated. _Annotation checke
    ```
 3. Create a `.pre-commit-hooks.yaml` or use your existing config file. Add the following lines:
   ```yaml
-repos:
--   repo: https://github.com/PaulinaPacyna/annotation-checker
-    rev: latest
-    hooks:
-    - id: annotation_checker
-      name: annotation_checker
-      description: Check that all python functions are annotated
-      entry: annotation_checker
-      language: python
-      files: ".py"
-      args: [--strict=True]
+   repos:
+   -   repo: https://github.com/PaulinaPacyna/annotation-checker
+       rev: latest
+       hooks:
+       - id: annotation_checker
+         name: annotation_checker
+         description: Check that all python functions are annotated
+         entry: annotation_checker
+         language: python
+         files: ".py"
+         args: [--strict=True]
   ``` 
