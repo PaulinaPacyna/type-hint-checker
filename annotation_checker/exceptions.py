@@ -1,0 +1,2 @@
+class IncorrectFileException(Exception):
+    pass

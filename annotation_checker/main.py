@@ -4,6 +4,7 @@ import logging
 import ast
 
 from annotation_checker.checkers import FunctionChecker, ClassChecker
+from annotation_checker.exceptions import IncorrectFileException
 
 logger = logging.getLogger("annotation_checker")
 logging.basicConfig()
@@ -21,7 +22,10 @@ def check_annotated(file_list: List[str], exclude_self: bool = False) -> bool:
     for filename in file_list:
         with open(filename, "r") as file:
             content = file.read()
-            body = ast.parse(content).body
+            try:
+                body = ast.parse(content).body
+            except SyntaxError:
+                raise IncorrectFileException(f"File could not be parsed: {filename}")
             for item in body:
                 if isinstance(item, ast.FunctionDef):
                     checker = FunctionChecker(item)
