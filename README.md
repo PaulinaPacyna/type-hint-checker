@@ -24,3 +24,8 @@ Checks that arguments in functions and methods are annotated. _Annotation checke
          files: ".py"
          args: [--strict=True]
   ``` 
+#### Tests
+To run the tests, run 
+```shell script
+python -m pytest tests/
+```
