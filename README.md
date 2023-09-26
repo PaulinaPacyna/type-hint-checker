@@ -2,16 +2,13 @@
 Checks that arguments in functions and methods are annotated. _Annotation checker_ is intended to be used as a [pre-commit](https://pre-commit.com/) hook.
 
 ## Quick start
-0. Install pre-commit hooks [https://pre-commit.com/#install](https://pre-commit.com/#install)
+1. Install pre-commit hooks [https://pre-commit.com/#install](https://pre-commit.com/#install)
    ```shell
    pip install pre-commit
    ```
-1. Try the cli version out by running
-   ```shell
-   annotation_checker <path to file>
-   ```
-3. Create a `.pre-commit-hooks.yaml` or use your existing config file. Add the following lines:
-  ```yaml
+
+2. Create a `.pre-commit-hooks.yaml` or use your existing config file. Add the following lines:
+   ```yaml
    repos:
    -   repo: https://github.com/PaulinaPacyna/annotation-checker
        rev: latest
@@ -23,4 +20,19 @@ Checks that arguments in functions and methods are annotated. _Annotation checke
          language: python
          files: ".py"
          args: [--strict=True]
-  ``` 
+   ```
+3. Install the pre-commit hook
+   ```
+   pre-commit install
+   ```
+
+### Run annotation checker from terminal
+0. If you already have it installed in pre-commit hooks:
+   ```
+   pre-commit run annotation_checker --all-files
+   ```
+1. Try the cli version out by running
+   ```shell
+   pip install annotation_checker
+   annotation_checker <path to file>
+   ```
