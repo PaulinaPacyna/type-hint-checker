@@ -31,6 +31,11 @@ def incorrect_file():
     return "key1:\nkey2:"
 
 
+@fixture
+def string_annotation():
+    return 'def f(self: "Class") -> int:\n    pass'
+
+
 @pytest.mark.parametrize(
     "input,result",
     [
@@ -38,6 +43,7 @@ def incorrect_file():
         ("no_return", False),
         ("no_args", True),
         ("not_a_function", True),
+        ("string_annotation", True),
     ],
 )
 def test_check_annotated(input, result, tmp_path: pathlib.Path, request):
