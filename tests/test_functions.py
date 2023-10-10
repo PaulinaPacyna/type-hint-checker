@@ -52,7 +52,7 @@ def test_check_annotated(input, result, tmp_path: pathlib.Path, request):
     assert check_annotated([file]) == result
 
 
-def test_incorrect_file(incorrect_file, tmp_path: pathlib.Path, request):
+def test_incorrect_file(incorrect_file, tmp_path: pathlib.Path):
     file = tmp_path / "file737ny73814781.py"
     file.write_text(incorrect_file, encoding="utf-8")
     with raises(IncorrectFileException) as exception:
