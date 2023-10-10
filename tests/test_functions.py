@@ -1,7 +1,7 @@
 import pytest
 
 from annotation_checker.exceptions import IncorrectFileException
-from annotation_checker.main import check_annotated
+from annotation_checker.main import check_annotated, filter_files
 import pathlib
 from pytest import fixture, raises
 
@@ -58,3 +58,10 @@ def test_incorrect_file(incorrect_file, tmp_path: pathlib.Path):
     with raises(IncorrectFileException) as exception:
         check_annotated([file])
     assert "file737ny73814781.py" in str(exception)
+
+
+def test_filter_files() -> None:
+    file_list = ["file1.py", "file2.txt", "excluded/dir/file3.py", "", "test_file4.py"]
+    result = ["file1.py"]
+    pattern = r"(excluded/|test_)"
+    assert filter_files(file_list, pattern) == result

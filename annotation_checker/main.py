@@ -1,4 +1,5 @@
 import argparse
+import re
 from typing import List
 import logging
 import ast
@@ -41,9 +42,6 @@ def check_annotated(file_list: List[str], exclude_self: bool = False) -> bool:
 def parse_arguments() -> argparse.Namespace:
     """
     Parses command line arguments.
-    Returns
-    -------
-        Namespace
     """
     parser = argparse.ArgumentParser()
     parser.add_argument(
@@ -61,15 +59,34 @@ def parse_arguments() -> argparse.Namespace:
         type=bool,
         default=False,
     )
+    parser.add_argument(
+        "--exclude_files",
+        help="Regex specifying which files should not be checked",
+        type=str,
+        default="",
+    )
     args = parser.parse_args()
     return args
+
+
+def filter_files(files: List[str], exclude_pattern: str) -> List[str]:
+    """
+    Filters the list of files passed by pre-commit hook to exclude files by a regex.
+    Returns only filenames ending with .py
+    """
+    result = []
+    for filename in files:
+        if not re.match(exclude_pattern, filename) and filename.endswith(".py"):
+            result.append(filename)
+    return result
 
 
 def main() -> None:
     """Reads the command lines arguments and runs the annotation_checker"""
     logger.setLevel(logging.INFO)
     args = parse_arguments()
-    logger.debug("Files: %s", args.filenames)
+    files = filter_files(files=args.filenames, exclude_pattern=args.exclude_files)
+    logger.debug("Files: %s", files)
     exit_code = 1 - check_annotated(args.filenames, exclude_self=args.exclude_self)
     if args.strict and exit_code:
         exit(exit_code)
