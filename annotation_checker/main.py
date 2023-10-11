@@ -87,7 +87,7 @@ def main() -> None:
     args = parse_arguments()
     files = filter_files(files=args.filenames, exclude_pattern=args.exclude_files)
     logger.debug("Files: %s", files)
-    exit_code = 1 - check_annotated(args.filenames, exclude_self=args.exclude_self)
+    exit_code = 1 - check_annotated(files, exclude_self=args.exclude_self)
     if args.strict and exit_code:
         exit(exit_code)
 
