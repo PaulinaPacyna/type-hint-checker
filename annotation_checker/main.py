@@ -25,8 +25,10 @@ def check_annotated(file_list: List[str], exclude_self: bool = False) -> bool:
             content = file.read()
             try:
                 body = ast.parse(content).body
-            except SyntaxError:
-                raise IncorrectFileException(f"File could not be parsed: {filename}")
+            except SyntaxError as exc:
+                raise IncorrectFileException(
+                    f"File could not be parsed: {filename}"
+                ) from exc
             for item in body:
                 if isinstance(item, ast.FunctionDef):
                     checker = FunctionChecker(item)
@@ -35,7 +37,7 @@ def check_annotated(file_list: List[str], exclude_self: bool = False) -> bool:
                 else:
                     continue
                 result = result and checker.check()
-                checker.log_results(logger)
+                checker.log_results(logger, filename=filename)
     return result
 
 
