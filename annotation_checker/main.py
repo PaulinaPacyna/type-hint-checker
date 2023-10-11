@@ -1,6 +1,5 @@
 import argparse
 import re
-import sys
 from typing import List
 import logging
 import ast
@@ -9,7 +8,6 @@ from annotation_checker.checkers import FunctionChecker, ClassChecker
 from annotation_checker.exceptions import IncorrectFileException
 
 logger = logging.getLogger("annotation_checker")
-logger.addHandler(logging.StreamHandler(sys.stdout))
 logging.basicConfig()
 
 
