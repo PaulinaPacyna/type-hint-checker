@@ -1,5 +1,6 @@
 import argparse
 import re
+import sys
 from typing import List
 import logging
 import ast
@@ -8,6 +9,7 @@ from annotation_checker.checkers import FunctionChecker, ClassChecker
 from annotation_checker.exceptions import IncorrectFileException
 
 logger = logging.getLogger("annotation_checker")
+logger.addHandler(logging.StreamHandler(sys.stdout))
 logging.basicConfig()
 
 
@@ -78,8 +80,9 @@ def filter_files(files: List[str], exclude_pattern: str) -> List[str]:
     """
     result = []
     for filename in files:
-        if not re.match(exclude_pattern, filename) and filename.endswith(".py"):
-            result.append(filename)
+        if not exclude_pattern or not re.match(exclude_pattern, filename):
+            if filename.endswith(".py"):
+                result.append(filename)
     return result
 
 

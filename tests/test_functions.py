@@ -71,6 +71,13 @@ def test_filter_files() -> None:
     assert filter_files(file_list, pattern) == result
 
 
+def test_filter_files_no_exlude() -> None:
+    file_list = ["file1.py", "file2.txt", "excluded/dir/file3.py", "", "test_file4.py"]
+    result = ["file1.py", "excluded/dir/file3.py", "test_file4.py"]
+    pattern = ""
+    assert filter_files(file_list, pattern) == result
+
+
 def test_filepath_in_log(no_return, tmp_path, caplog) -> None:
     file = tmp_path / "file737ny73466364781.py"
     file.write_text(no_return, encoding="utf-8")
