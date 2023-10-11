@@ -7,32 +7,32 @@ from pytest import fixture, raises
 
 
 @fixture
-def mixed_args():
+def mixed_args() -> str:
     return "def f1(a, b: int):\n    return 5"
 
 
 @fixture
-def no_return():
+def no_return() -> str:
     return "def f1(a: int):\n    pass"
 
 
 @fixture
-def no_args():
+def no_args() -> str:
     return "def f1() -> None:\n    pass"
 
 
 @fixture
-def not_a_function():
+def not_a_function() -> str:
     return "x=4"
 
 
 @fixture
-def incorrect_file():
+def incorrect_file() -> str:
     return "key1:\nkey2:"
 
 
 @fixture
-def string_annotation():
+def string_annotation() -> str:
     return 'def f(self: "Class") -> int:\n    pass'
 
 
@@ -46,13 +46,13 @@ def string_annotation():
         ("string_annotation", True),
     ],
 )
-def test_check_annotated(input, result, tmp_path: pathlib.Path, request):
+def test_check_annotated(input, result, tmp_path: pathlib.Path, request) -> None:
     file = tmp_path / "file.py"
     file.write_text(request.getfixturevalue(input), encoding="utf-8")
     assert check_annotated([file]) == result
 
 
-def test_incorrect_file(incorrect_file, tmp_path: pathlib.Path):
+def test_incorrect_file(incorrect_file, tmp_path: pathlib.Path) -> None:
     file = tmp_path / "file737ny73814781.py"
     file.write_text(incorrect_file, encoding="utf-8")
     with raises(IncorrectFileException) as exception:
