@@ -1,3 +1,7 @@
+import logging
+from io import StringIO
+from contextlib import redirect_stdout
+
 import pytest
 
 from annotation_checker.exceptions import IncorrectFileException
@@ -65,3 +69,11 @@ def test_filter_files() -> None:
     result = ["file1.py"]
     pattern = r"(excluded/|test_)"
     assert filter_files(file_list, pattern) == result
+
+
+def test_filepath_in_log(no_return, tmp_path, caplog) -> None:
+    file = tmp_path / "file737ny73466364781.py"
+    file.write_text(no_return, encoding="utf-8")
+    with caplog.at_level(logging.INFO):
+        check_annotated([file])
+    assert "file737ny73466364781.py" in caplog.text
