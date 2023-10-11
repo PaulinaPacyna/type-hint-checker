@@ -51,7 +51,7 @@ def parse_arguments() -> argparse.Namespace:
     )
     parser.add_argument(
         "--strict",
-        help="If True and checks failes, exit the program with 1 code.",
+        help="If True and checks fails, exit the program with 1 code.",
         type=bool,
         default=False,
     )
