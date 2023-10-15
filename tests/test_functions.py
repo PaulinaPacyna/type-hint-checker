@@ -1,11 +1,11 @@
 import logging
 
+import pathlib
 import pytest
+from pytest import fixture, raises
 
 from annotation_checker.exceptions import IncorrectFileException
 from annotation_checker.main import check_annotated, filter_files
-import pathlib
-from pytest import fixture, raises
 
 
 @fixture
@@ -118,3 +118,24 @@ def test_exclude_parameters_by_regex(
     file = tmp_path / "file.py"
     file.write_text(mixed_args_with_return, encoding="utf-8")
     assert check_annotated([file], exclude_parameters=pattern) == result
+
+
+@pytest.mark.parametrize(
+    "input_,pattern,result",
+    [
+        ("mixed_args", "", False),
+        ("no_return", "", False),
+        ("mixed_args_with_return", "", False),
+        ("mixed_args", "dgag", False),
+        ("no_return", "adsg", False),
+        ("mixed_args_with_return", "agddfa", False),
+        ("mixed_args", "^f", True),
+        ("no_return", "^f", True),
+        ("mixed_args_with_return", "^f", True),
+    ],
+)
+def test_exclude_by_name(input_, pattern, result, tmp_path: pathlib.Path, request):
+    """Test excluding functions and classes by name"""
+    file = tmp_path / "file.py"
+    file.write_text(request.getfixturevalue(input_), encoding="utf-8")
+    assert check_annotated([file], exclude_by_name=pattern) == result

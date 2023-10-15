@@ -13,7 +13,10 @@ logging.basicConfig()
 
 
 def check_annotated(
-    file_list: List[str], exclude_parameters: str = "", exclude_self: bool = False
+    file_list: List[str],
+    exclude_parameters: str = "",
+    exclude_self: bool = False,
+    exclude_by_name: str = "",
 ) -> bool:
     """
     Iterates through the list of file paths, parses the files and checks if all
@@ -25,6 +28,8 @@ def check_annotated(
                             checked
         exclude_self: bool - if True, omit type checking for the first parameter in
                             methods
+        exclude_by_name: str - Regex specifying names of functions, methods and classes
+                            that should not be checked
     Returns
     ----------
         True if all files are type-annotated.
@@ -41,16 +46,19 @@ def check_annotated(
                 ) from exc
             for item in body:
                 if isinstance(item, ast.FunctionDef):
-                    checker = FunctionChecker(exclude_parameters=exclude_parameters)
+                    checker = FunctionChecker(
+                        exclude_parameters=exclude_parameters,
+                        exclude_by_name=exclude_by_name,
+                    )
                 elif isinstance(item, ast.ClassDef):
                     checker = ClassChecker(
-                        exclude_parameters=exclude_parameters, exclude_self=exclude_self
+                        exclude_parameters=exclude_parameters,
+                        exclude_self=exclude_self,
+                        exclude_by_name=exclude_by_name,
                     )
                 else:
                     continue
-                result = result and checker.check(
-                    item,
-                )
+                result = result and checker.check(item)
                 checker.log_results(logger, filename=filename)
     return result
 
@@ -84,6 +92,13 @@ def parse_arguments() -> argparse.Namespace:
     parser.add_argument(
         "--exclude_parameters",
         help="Regex specifying which parameters should not be checked",
+        type=str,
+        default="",
+    )
+    parser.add_argument(
+        "--exclude_by_name",
+        help="Regex specifying names of functions, methods and classes that should not "
+        "be checked",
         type=str,
         default="",
     )
@@ -123,6 +138,7 @@ def main() -> None:
         files,
         exclude_parameters=args.exclude_parameters,
         exclude_self=args.exclude_self,
+        exclude_by_name=args.exclude_by_name,
     )
     if args.strict and exit_code:
         sys.exit(exit_code)

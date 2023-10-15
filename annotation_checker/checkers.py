@@ -2,7 +2,7 @@ import ast
 import re
 from abc import ABC, abstractmethod
 from logging import Logger
-from typing import List, Optional
+from typing import List, Optional, Union
 
 
 class Checker(ABC):
@@ -13,22 +13,28 @@ class Checker(ABC):
                                 checked
         exclude_self (bool): if True, omit type checking for the first parameter in
                                 method
+        exclude_by_name: str - Regex specifying names of functions, methods and classes
+                                that should not be checked
     """
 
     def __init__(
-        self, exclude_parameters: str = "", exclude_self: bool = False
+        self,
+        exclude_parameters: str = "",
+        exclude_self: bool = False,
+        exclude_by_name: str = "",
     ) -> None:
         self._errors = []
         self._exclude_parameters = exclude_parameters
         self._exclude_self = exclude_self
+        self._exclude_by_name = exclude_by_name
 
     @abstractmethod
-    def check(self, source: str) -> bool:
+    def check(self, item: Union[ast.FunctionDef, ast.ClassDef]) -> bool:
         """
         Returns True if a given function/method is type-annotated according to settings.
         Parameters
         ----------
-            source (str): string containing the source of the object to be checked
+            item (Union[ast.FunctionDef, ast.ClassDef]): the object to be checked
         Returns
         -------
             Bool
@@ -58,6 +64,19 @@ class Checker(ABC):
         """
         return self._errors
 
+    def _check_if_name_not_excluded(self, name: str) -> bool:
+        """
+        Checks if the function or class should be checked
+        Parameters
+        ----------
+        name (str): name of the function or class
+
+        Returns
+        -------
+            bool - False if the object should not be checked
+        """
+        return not self._exclude_by_name or not re.match(self._exclude_by_name, name)
+
 
 class FunctionChecker(Checker):
     """Checks if a function is correctly type-annotated.
@@ -67,35 +86,43 @@ class FunctionChecker(Checker):
                                 checked
         exclude_self (bool): if True, omit type checking for the first parameter in
                                 method
+        exclude_by_name: str - Regex specifying names of functions, methods and classes
+                                that should not be checked
     """
 
     def __init__(
-        self, exclude_parameters: str = "", exclude_self: bool = False
+        self,
+        exclude_parameters: str = "",
+        exclude_self: bool = False,
+        exclude_by_name: str = "",
     ) -> None:
         super().__init__(
-            exclude_parameters=exclude_parameters, exclude_self=exclude_self
+            exclude_parameters=exclude_parameters,
+            exclude_self=exclude_self,
+            exclude_by_name=exclude_by_name,
         )
 
-    def check(self, source: str) -> bool:
+    def check(self, item: ast.FunctionDef) -> bool:
         """
         Checks that the function is annotated (arguments and return type).
         Parameters
         ----------
-            source (str): string containing the source of the function to be checked
+            item (ast.FunctionDef): the function to be checked
         Returns
         -------
         bool
             True if correctly annotated
         """
-        self.__check_args(source)
-        self.__check_return(source)
+        if self._check_if_name_not_excluded(item.name):
+            self.__check_args(item)
+            self.__check_return(item)
         return not bool(self._errors)
 
     def __check_args(self, function: ast.FunctionDef) -> None:
         """Check that the arguments of a function are correctly type-annotated.
         Parameters
         ----------
-            function (str): string containing the source of the function to be checked
+            function (ast.FunctionDef): the function to be checked
         """
         args = function.args
         if self._exclude_self:
@@ -144,13 +171,20 @@ class ClassChecker(Checker):
                                 checked
         exclude_self (bool): if True, omit type checking for the first parameter in
                                 methods
+        exclude_by_name: str - Regex specifying names of functions, methods and classes
+                                that should not be checked
     """
 
     def __init__(
-        self, exclude_parameters: List[str] = (), exclude_self: bool = False
+        self,
+        exclude_parameters: List[str] = (),
+        exclude_self: bool = False,
+        exclude_by_name: str = "",
     ) -> None:
         super().__init__(
-            exclude_parameters=exclude_parameters, exclude_self=exclude_self
+            exclude_parameters=exclude_parameters,
+            exclude_self=exclude_self,
+            exclude_by_name=exclude_by_name,
         )
 
     def check(self, source: ast.ClassDef) -> bool:
@@ -158,13 +192,15 @@ class ClassChecker(Checker):
         Checks if all methods in a given class are correctly type-annotated.
         Parameters
         ----------
-            source (str): string containing the ast.source of the class to be checked
+            source (ast.FunctionDef): the class to be checked
         Returns
         -------
         bool
             True if all methods are correctly type-annotated.
         """
         result = True
+        if not self._check_if_name_not_excluded(source.name):
+            return result
         for method in source.body:
             if isinstance(method, ast.FunctionDef):
                 function_checker = FunctionChecker(exclude_self=self._exclude_self)
