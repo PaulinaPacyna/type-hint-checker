@@ -48,6 +48,7 @@ def incorrect_file() -> str:
 
 @fixture
 def string_annotation() -> str:
+    """Example of a function annotated with a string"""
     return 'def f(self: "Class") -> int:\n    pass'
 
 
@@ -63,12 +64,14 @@ def string_annotation() -> str:
     ],
 )
 def test_check_annotated(input_, result, tmp_path: pathlib.Path, request) -> None:
+    """Basic checks"""
     file = tmp_path / "file.py"
     file.write_text(request.getfixturevalue(input_), encoding="utf-8")
     assert check_annotated([file]) == result
 
 
 def test_incorrect_file(incorrect_file, tmp_path: pathlib.Path) -> None:
+    """Test if passing incorrect file raises the correct error"""
     file = tmp_path / "file737ny73814781.py"
     file.write_text(incorrect_file, encoding="utf-8")
     with raises(IncorrectFileException) as exception:
@@ -77,6 +80,7 @@ def test_incorrect_file(incorrect_file, tmp_path: pathlib.Path) -> None:
 
 
 def test_filter_files() -> None:
+    """Test filtering files by regex"""
     file_list = ["file1.py", "file2.txt", "excluded/dir/file3.py", "", "test_file4.py"]
     result = ["file1.py"]
     pattern = r"(excluded/|test_)"
@@ -84,6 +88,7 @@ def test_filter_files() -> None:
 
 
 def test_filter_files_no_exclude() -> None:
+    """Test default file filter"""
     file_list = ["file1.py", "file2.txt", "excluded/dir/file3.py", "", "test_file4.py"]
     result = ["file1.py", "excluded/dir/file3.py", "test_file4.py"]
     pattern = ""
@@ -91,6 +96,7 @@ def test_filter_files_no_exclude() -> None:
 
 
 def test_filepath_in_log(no_return, tmp_path: pathlib.Path, caplog) -> None:
+    """Test if the path to th file appears in the log"""
     file = tmp_path / "file737ny73466364781.py"
     file.write_text(no_return, encoding="utf-8")
     with caplog.at_level(logging.INFO):
@@ -98,7 +104,17 @@ def test_filepath_in_log(no_return, tmp_path: pathlib.Path, caplog) -> None:
     assert "file737ny73466364781.py" in caplog.text
 
 
-def test_exclude_parameters_by_regex(mixed_args_with_return, tmp_path: pathlib.Path):
+@pytest.mark.parametrize(
+    "pattern,result",
+    [
+        ("^test", True),
+        ("", False),
+    ],
+)
+def test_exclude_parameters_by_regex(
+    pattern, result, mixed_args_with_return, tmp_path: pathlib.Path
+):
+    """Test if parameters are excluded"""
     file = tmp_path / "file.py"
     file.write_text(mixed_args_with_return, encoding="utf-8")
-    assert check_annotated([file], exclude_parameters="^test")
+    assert check_annotated([file], exclude_parameters=pattern) == result
