@@ -102,6 +102,14 @@ def parse_arguments() -> argparse.Namespace:
         type=str,
         default="",
     )
+    parser.add_argument(
+        "--log-level",
+        help="Controls how the amount of log messages",
+        type=str,
+        default="INFO",
+        choices=["INFO", "DEBUG"],
+    )
+
     args = parser.parse_args()
     return args
 
@@ -130,8 +138,9 @@ def filter_files(files: List[str], exclude_pattern: str) -> List[str]:
 
 def main() -> None:
     """Reads the command line arguments and runs the annotation_checker"""
-    logger.setLevel(logging.INFO)
     args = parse_arguments()
+    logger.setLevel(args.log_level)
+    logger.debug(vars(args))
     files = filter_files(files=args.filenames, exclude_pattern=args.exclude_files)
     logger.debug("Files: %s", files)
     exit_code = 1 - check_annotated(
