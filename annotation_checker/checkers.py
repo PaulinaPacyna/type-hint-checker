@@ -204,6 +204,6 @@ class ClassChecker(Checker):
         for method in source.body:
             if isinstance(method, ast.FunctionDef):
                 function_checker = FunctionChecker(exclude_self=self._exclude_self)
-                result = result and function_checker.check(method)
+                result = function_checker.check(method) and result
                 self._errors += function_checker.get_errors()
         return result
