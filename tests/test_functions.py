@@ -139,3 +139,21 @@ def test_exclude_by_name(input_, pattern, result, tmp_path: pathlib.Path, reques
     file = tmp_path / "file.py"
     file.write_text(request.getfixturevalue(input_), encoding="utf-8")
     assert check_annotated([file], exclude_by_name=pattern) == result
+
+
+def testing_multiple_files(
+    mixed_args, no_return, mixed_args_with_return, tmp_path: pathlib.Path, caplog
+):
+    files_content_mapping = {
+        "mixed_args.py": mixed_args,
+        "no_return.py": no_return,
+        "mixed_args_with_return.py": mixed_args_with_return,
+    }
+    files = []
+    for case, content in files_content_mapping.items():
+        file = tmp_path / case
+        file.write_text(content, encoding="utf-8")
+        files.append(file)
+    with caplog.at_level(logging.INFO):
+        check_annotated(list(files))
+        assert all(filename in caplog.text for filename in files_content_mapping)
