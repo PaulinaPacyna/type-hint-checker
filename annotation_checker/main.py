@@ -142,10 +142,6 @@ def main() -> None:
     logger.setLevel(args.log_level)
     logger.debug(vars(args))
     files = filter_files(files=args.filenames, exclude_pattern=args.exclude_files)
-    files = [
-        "../test_annotation_checker/" + x
-        for x in ["mixed_args.py", "no_args.py", "mixed_args_with_return.py"]
-    ]
     logger.debug("Files: %s", files)
     exit_code = 1 - check_annotated(
         files,
