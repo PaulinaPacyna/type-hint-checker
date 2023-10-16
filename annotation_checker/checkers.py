@@ -75,7 +75,7 @@ class Checker(ABC):
         -------
             bool - False if the object should not be checked
         """
-        return not self._exclude_by_name or not re.match(self._exclude_by_name, name)
+        return not self._exclude_by_name or not re.search(self._exclude_by_name, name)
 
 
 class FunctionChecker(Checker):
@@ -144,7 +144,7 @@ class FunctionChecker(Checker):
         ---------
             bool
         """
-        return not self._exclude_parameters or not re.match(
+        return not self._exclude_parameters or not re.search(
             self._exclude_parameters, argument
         )
 

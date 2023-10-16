@@ -130,7 +130,7 @@ def filter_files(files: List[str], exclude_pattern: str) -> List[str]:
     """
     result = []
     for filename in files:
-        if not exclude_pattern or not re.match(exclude_pattern, filename):
+        if not exclude_pattern or not re.search(exclude_pattern, filename):
             if filename.endswith(".py"):
                 result.append(filename)
     return result
