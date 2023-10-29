@@ -187,23 +187,27 @@ class ClassChecker(Checker):
             exclude_by_name=exclude_by_name,
         )
 
-    def check(self, source: ast.ClassDef) -> bool:
+    def check(self, item: ast.ClassDef) -> bool:
         """
         Checks if all methods in a given class are correctly type-annotated.
         Parameters
         ----------
-            source (ast.FunctionDef): the class to be checked
+            item (ast.FunctionDef): the class to be checked
         Returns
         -------
         bool
             True if all methods are correctly type-annotated.
         """
         result = True
-        if not self._check_if_name_not_excluded(source.name):
+        if not self._check_if_name_not_excluded(item.name):
             return result
-        for method in source.body:
+        for method in item.body:
             if isinstance(method, ast.FunctionDef):
-                function_checker = FunctionChecker(exclude_self=self._exclude_self)
+                function_checker = FunctionChecker(
+                    exclude_self=self._exclude_self,
+                    exclude_parameters=self._exclude_parameters,
+                    exclude_by_name=self._exclude_by_name,
+                )
                 result = function_checker.check(method) and result
                 self._errors += function_checker.get_errors()
         return result
