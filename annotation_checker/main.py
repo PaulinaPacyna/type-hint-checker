@@ -81,7 +81,7 @@ def parse_arguments() -> argparse.Namespace:
         "--exclude_self",
         help="If True, omit type checking for the first parameter in methods.",
         type=bool,
-        default=False,
+        default=True,
     )
     parser.add_argument(
         "--exclude_files",
