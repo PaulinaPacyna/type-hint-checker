@@ -9,16 +9,10 @@ permissions:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v3
-    - name: Set up Python 3.10
-      uses: actions/setup-python@v3
-      with:
-        python-version: "3.10"
-    - name: Add annotation_checker to PYTHONPATH
+    - name: Send feature dispatch
       run: |
         curl -XPOST -u "PaulinaPacyna:${{secrets.PAT_TOKEN}}" \
         -H "Accept: application/vnd.github.everest-preview+json" \
