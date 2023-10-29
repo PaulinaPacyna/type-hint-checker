@@ -23,4 +23,5 @@ jobs:
         curl -XPOST -u "PaulinaPacyna:${{secrets.PAT_TOKEN}}" \
         -H "Accept: application/vnd.github.everest-preview+json" \
         -H "Content-Type: application/json" https://api.github.com/repos/PaulinaPacyna/test_annotation_checker/dispatches \
-        --data '{"event_type": "feature"}'
+        --data '{"event_type": "feature"}' \
+        --fail-with-body
