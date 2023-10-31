@@ -64,19 +64,6 @@ class Checker(ABC):
         """
         return self._errors
 
-    def _check_if_name_not_excluded(self, name: str) -> bool:
-        """
-        Checks if the function or class should be checked
-        Parameters
-        ----------
-        name (str): name of the function or class
-
-        Returns
-        -------
-            bool - False if the object should not be checked
-        """
-        return not self._exclude_by_name or not re.search(self._exclude_by_name, name)
-
 
 class FunctionChecker(Checker):
     """Checks if a function is correctly type-annotated.
@@ -113,9 +100,8 @@ class FunctionChecker(Checker):
         bool
             True if correctly annotated
         """
-        if self._check_if_name_not_excluded(item.name):
-            self.__check_args(item)
-            self.__check_return(item)
+        self.__check_args(item)
+        self.__check_return(item)
         return not bool(self._errors)
 
     def __check_args(self, function: ast.FunctionDef) -> None:
@@ -199,8 +185,6 @@ class ClassChecker(Checker):
             True if all methods are correctly type-annotated.
         """
         result = True
-        if not self._check_if_name_not_excluded(item.name):
-            return result
         for method in item.body:
             if isinstance(method, ast.FunctionDef):
                 function_checker = FunctionChecker(

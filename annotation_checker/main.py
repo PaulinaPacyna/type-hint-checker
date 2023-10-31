@@ -3,10 +3,9 @@ import re
 import sys
 from typing import List
 import logging
-import ast
 
 from annotation_checker.checkers import FunctionChecker, ClassChecker
-from annotation_checker.exceptions import IncorrectFileException
+from annotation_checker.file_parser import FileParser
 
 logger = logging.getLogger("annotation_checker")
 logging.basicConfig()
@@ -36,30 +35,20 @@ def check_annotated(
     """
     result = True
     for filename in file_list:
-        with open(filename, "r", encoding="utf-8") as file:
-            content = file.read()
-            try:
-                body = ast.parse(content).body
-            except SyntaxError as exc:
-                raise IncorrectFileException(
-                    f"File could not be parsed: {filename}"
-                ) from exc
-            for item in body:
-                if isinstance(item, ast.FunctionDef):
-                    checker = FunctionChecker(
-                        exclude_parameters=exclude_parameters,
-                        exclude_by_name=exclude_by_name,
-                    )
-                elif isinstance(item, ast.ClassDef):
-                    checker = ClassChecker(
-                        exclude_parameters=exclude_parameters,
-                        exclude_self=exclude_self,
-                        exclude_by_name=exclude_by_name,
-                    )
-                else:
-                    continue
-                result = checker.check(item) and result
-                checker.log_results(logger, filename=filename)
+        file = FileParser(filename, excluded_names=exclude_by_name)
+        function_checker = FunctionChecker(
+            exclude_parameters=exclude_parameters, exclude_self=exclude_self
+        )
+        class_checker = ClassChecker(
+            exclude_parameters=exclude_parameters, exclude_self=exclude_self
+        )
+
+        for function in file.functions:
+            result = function_checker.check(function) and result
+            function_checker.log_results(logger, filename=filename)
+        for class_ in file.classes:
+            result = class_checker.check(class_) and result
+            class_checker.log_results(logger, filename=filename)
     return result
 
 
