@@ -82,12 +82,12 @@ def comment_body() -> str:
 def comment_long_header() -> str:
     """Example of a function without annotations, with #no-check comment"""
     return (
-        "x=1"
-        "def f1("
-        "        aaaaaaaaaaaaaaaaa, "
-        "        bbbbbbbbbbbbbbbbbb):#no-check"
-        "    return 5"
-        "y=6"
+        "x=1\n"
+        "def f1(\n"
+        "        aaaaaaaaaaaaaaaaa, \n"
+        "        bbbbbbbbbbbbbbbbbb):#no-check\n"
+        "    return 5\n"
+        "y=6\n"
     )
 
 
@@ -95,12 +95,12 @@ def comment_long_header() -> str:
 def comment_long_header_2() -> str:
     """Example of a function without annotations, with #no-check comment"""
     return (
-        "x=1"
-        "def f1(#no-check"
-        "        aaaaaaaaaaaaaaaaa, "
-        "        bbbbbbbbbbbbbbbbbb):"
-        "    return 5"
-        "y=6"
+        "x=1\n"
+        "def f1(#no-check\n"
+        "        aaaaaaaaaaaaaaaaa, \n"
+        "        bbbbbbbbbbbbbbbbbb):\n"
+        "    return 5\n"
+        "y=6\n"
     )
 
 
