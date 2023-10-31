@@ -52,6 +52,58 @@ def string_annotation() -> str:
     return 'def f(self: "Class") -> int:\n    pass'
 
 
+@fixture
+def comment_above() -> str:
+    """Example of a function without annotations, with #no-check comment above the
+    function definition"""
+    return "x=1 #no-check\ndef f1(a, b):\n    return 5\ny=6"
+
+
+@fixture
+def comment_below() -> str:
+    """Example of a function without annotations, with #no-check comment below the
+    function definition"""
+    return "x=1\ndef f1(a, b):\n    return 5\ny=6 #no-check"
+
+
+@fixture
+def comment_header() -> str:
+    """Example of a function without annotations, with #no-check comment"""
+    return "x=1\ndef f1(a, b):#no-check\n    return 5\ny=6 "
+
+
+@fixture
+def comment_body() -> str:
+    """Example of a function without annotations, with #no-check comment"""
+    return "x=1\ndef f1(a, b):\n    return 5 #no-check\ny=6 "
+
+
+@fixture
+def comment_long_header() -> str:
+    """Example of a function without annotations, with #no-check comment"""
+    return (
+        "x=1"
+        "def f1("
+        "        aaaaaaaaaaaaaaaaa, "
+        "        bbbbbbbbbbbbbbbbbb):#no-check"
+        "    return 5"
+        "y=6"
+    )
+
+
+@fixture
+def comment_long_header_2() -> str:
+    """Example of a function without annotations, with #no-check comment"""
+    return (
+        "x=1"
+        "def f1(#no-check"
+        "        aaaaaaaaaaaaaaaaa, "
+        "        bbbbbbbbbbbbbbbbbb):"
+        "    return 5"
+        "y=6"
+    )
+
+
 @pytest.mark.parametrize(
     "input_,result",
     [
@@ -61,6 +113,12 @@ def string_annotation() -> str:
         ("not_a_function", True),
         ("string_annotation", True),
         ("mixed_args_with_return", False),
+        ("comment_above", False),
+        ("comment_below", False),
+        ("comment_body", True),
+        ("comment_header", True),
+        ("comment_long_header", True),
+        ("comment_long_header_2", True),
     ],
 )
 def test_check_annotated(input_, result, tmp_path: pathlib.Path, request) -> None:
