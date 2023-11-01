@@ -14,9 +14,17 @@ class FileParser:
         filename : str - path to the file
         excluded_names : str - regex specifying which functions and classes should be
                                 omitted
+        exclusion_comment : str - if this phrase appears in the comment, the item is
+                                excluded
     """
 
-    def __init__(self, filename: str, excluded_names: str) -> None:
+    def __init__(
+        self,
+        filename: str,
+        excluded_names: str = "",
+        exclusion_comment: str = "no-check",
+    ) -> None:
+        self.__exclusion_comment = exclusion_comment
         self.__excluded_names = excluded_names
         self.__filename = filename
         self.__body = self.__get_body()
@@ -78,7 +86,7 @@ class FileParser:
             tokenized = tokenize(file.readline)
             for item in tokenized:
                 if item.exact_type == COMMENT:
-                    if "no-check" in item.line:
+                    if self.__exclusion_comment in item.line:
                         result.append(item.start[0])
         return result
 

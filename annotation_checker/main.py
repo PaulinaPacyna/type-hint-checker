@@ -16,6 +16,7 @@ def check_annotated(
     exclude_parameters: str = "",
     exclude_self: bool = True,
     exclude_by_name: str = "",
+    exclusion_comment: str = "no-check",
 ) -> bool:
     """
     Iterates through the list of file paths, parses the files and checks if all
@@ -29,13 +30,19 @@ def check_annotated(
                             methods
         exclude_by_name: str - Regex specifying names of functions, methods and classes
                             that should not be checked
+        exclusion_comment : str - if this phrase appears in the comment, the item is
+                                not checked for type hints presence
     Returns
     ----------
         True if all files are type-annotated.
     """
     result = True
     for filename in file_list:
-        file = FileParser(filename, excluded_names=exclude_by_name)
+        file = FileParser(
+            filename,
+            excluded_names=exclude_by_name,
+            exclusion_comment=exclusion_comment,
+        )
         function_checker = FunctionChecker(
             exclude_parameters=exclude_parameters, exclude_self=exclude_self
         )
@@ -98,6 +105,13 @@ def parse_arguments() -> argparse.Namespace:
         default="INFO",
         choices=["INFO", "DEBUG"],
     )
+    parser.add_argument(
+        "--exclusion-comment",
+        help="If this phrase appears in the comment, the item is excluded. Default : "
+        "'no-check'",
+        type=str,
+        default="no-check",
+    )
 
     args = parser.parse_args()
     return args
@@ -137,6 +151,7 @@ def main() -> None:
         exclude_parameters=args.exclude_parameters,
         exclude_self=args.exclude_self,
         exclude_by_name=args.exclude_by_name,
+        exclusion_comment=args.exclusion_comment,
     )
     if args.strict and exit_code:
         sys.exit(exit_code)
