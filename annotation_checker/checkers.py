@@ -20,7 +20,7 @@ class Checker(ABC):
     def __init__(
         self,
         exclude_parameters: str = "",
-        exclude_self: bool = False,
+        exclude_self: bool = True,
         exclude_by_name: str = "",
     ) -> None:
         self._errors = []
@@ -80,7 +80,7 @@ class FunctionChecker(Checker):
     def __init__(
         self,
         exclude_parameters: str = "",
-        exclude_self: bool = False,
+        exclude_self: bool = True,
         exclude_by_name: str = "",
     ) -> None:
         super().__init__(
@@ -164,7 +164,7 @@ class ClassChecker(Checker):
     def __init__(
         self,
         exclude_parameters: List[str] = (),
-        exclude_self: bool = False,
+        exclude_self: bool = True,
         exclude_by_name: str = "",
     ) -> None:
         super().__init__(

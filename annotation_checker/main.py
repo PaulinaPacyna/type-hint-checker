@@ -14,7 +14,7 @@ logging.basicConfig()
 def check_annotated(
     file_list: List[str],
     exclude_parameters: str = "",
-    exclude_self: bool = False,
+    exclude_self: bool = True,
     exclude_by_name: str = "",
 ) -> bool:
     """
