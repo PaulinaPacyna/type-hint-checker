@@ -6,7 +6,7 @@ from typing import List
 from annotation_checker.exceptions import IncorrectFileException
 
 
-class FileParser:
+class FileParser:  # pylint: disable=too-few-public-methods
     """
     File with its AST, functions, classes and exclusions by comments
     Parameters
