@@ -44,7 +44,7 @@ def check_annotated(
             exclusion_comment=exclusion_comment,
         )
         function_checker = FunctionChecker(
-            exclude_parameters=exclude_parameters, exclude_self=exclude_self
+            exclude_parameters=exclude_parameters, exclude_self=False
         )
         class_checker = ClassChecker(
             exclude_parameters=exclude_parameters, exclude_self=exclude_self
