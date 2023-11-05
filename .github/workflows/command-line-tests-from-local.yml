@@ -1,4 +1,4 @@
-name: Test cli app installed from locsl
+name: Test command line app installed from local
 
 on:
   workflow_dispatch:
@@ -26,4 +26,4 @@ jobs:
         pip install .
     - name: Test with pytest
       run: |
-        python -m pytest tests/test_cli.py
+        python -m pytest tests/test_command_line.py
