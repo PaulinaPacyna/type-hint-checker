@@ -3,3 +3,11 @@ repos:
     rev: 23.9.1
     hooks:
     - id: black
+  - repo: local
+    hooks:
+      - id: annotation_checker
+        name: annotation_checker
+        entry: annotation_checker
+        language: python
+        files: '.py'
+        args: [--log-level=DEBUG, --strict=True, --exclude_files=tests, --exclude_self=True]
