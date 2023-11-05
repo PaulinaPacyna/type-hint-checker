@@ -2,9 +2,15 @@ import subprocess
 
 import pytest
 
+NO_RETURN = "tests/cases/no_return.py"
+MIXED_ARGS = "tests/cases/mixed_args.py"
+NO_ARGS = "tests/cases/no_args.py"
+NOT_A_FUNCTION = "tests/cases/not_a_function.py"
+MIXED_ARGS_WITH_RETURN = "tests/cases/mixed_args_with_return.py"
+
 
 def test_running_cli_version() -> None:
-    subprocess.run(["annotation_checker", "no_return.py"])
+    subprocess.run(["annotation_checker", NO_RETURN])
 
 
 def test_exclude_files() -> None:
@@ -13,9 +19,9 @@ def test_exclude_files() -> None:
             "annotation_checker",
             "--strict=True",
             r"--exclude_files=no_.*\.py",
-            "no_args.py",
-            "no_return.py",
-            "not_a_function.py",
+            NO_ARGS,
+            NO_RETURN,
+            NOT_A_FUNCTION,
         ],
         capture_output=True,
         universal_newlines=True,
@@ -26,11 +32,11 @@ def test_exclude_files() -> None:
 @pytest.mark.parametrize(
     "filename,result",
     [
-        ("mixed_args.py", 1),
-        ("no_return.py", 1),
-        ("no_args.py", 0),
-        ("not_a_function.py", 0),
-        ("mixed_args_with_return.py", 1),
+        (MIXED_ARGS, 1),
+        (NO_RETURN, 1),
+        (NO_ARGS, 0),
+        (NOT_A_FUNCTION, 0),
+        (MIXED_ARGS_WITH_RETURN, 1),
     ],
 )
 def test_exit_code(filename: str, result: int) -> None:
@@ -44,11 +50,11 @@ def test_exit_code(filename: str, result: int) -> None:
 
 def test_logging_filepath() -> None:
     process = subprocess.run(
-        ["annotation_checker", "no_return.py"],
+        ["annotation_checker", NO_RETURN],
         capture_output=True,
         universal_newlines=True,
     )
-    assert "no_return.py" in process.stderr
+    assert NO_RETURN in process.stderr
 
 
 @pytest.mark.parametrize(
@@ -63,7 +69,7 @@ def test_exclude_parameters(pattern: str, result: int) -> None:
         [
             "annotation_checker",
             "--strict=True",
-            "mixed_args_with_return.py",
+            MIXED_ARGS_WITH_RETURN,
             f"--exclude_parameters={pattern}",
         ],
         capture_output=True,
@@ -75,15 +81,15 @@ def test_exclude_parameters(pattern: str, result: int) -> None:
 @pytest.mark.parametrize(
     "input_,pattern,result",
     [
-        ("mixed_args.py", "", 1),
-        ("no_return.py", "", 1),
-        ("mixed_args_with_return.py", "", 1),
-        ("mixed_args.py", "dgag", 1),
-        ("no_return.py", "adsg", 1),
-        ("mixed_args_with_return.py", "agddfa", 1),
-        ("mixed_args.py", "^f", 0),
-        ("no_return.py", "^f", 0),
-        ("mixed_args_with_return.py", "^f", 0),
+        (MIXED_ARGS, "", 1),
+        (NO_RETURN, "", 1),
+        (MIXED_ARGS_WITH_RETURN, "", 1),
+        (MIXED_ARGS, "dgag", 1),
+        (NO_RETURN, "adsg", 1),
+        (MIXED_ARGS_WITH_RETURN, "agddfa", 1),
+        (MIXED_ARGS, "^f", 0),
+        (NO_RETURN, "^f", 0),
+        (MIXED_ARGS_WITH_RETURN, "^f", 0),
     ],
 )
 def test_exclude_by_name(input_: str, pattern: str, result: int) -> None:
@@ -103,7 +109,7 @@ def test_exclude_by_name(input_: str, pattern: str, result: int) -> None:
 
 def test_debug_level():
     process = subprocess.run(
-        ["annotation_checker", "no_return.py", "--log-level=DEBUG"],
+        ["annotation_checker", NO_RETURN, "--log-level=DEBUG"],
         capture_output=True,
         universal_newlines=True,
     )
