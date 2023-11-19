@@ -4,9 +4,6 @@ import subprocess
 
 def run_command(command: str) -> subprocess.CompletedProcess:
     """Common interface for executing command line programms"""
-    shell_path = os.getenv("ANNOTATION_CHECKER_SHELL_PATH")
-    if shell_path:
-        command = f'{shell_path}, -c "{command}"'
     return subprocess.run(
         command.split(), capture_output=True, universal_newlines=True, check=False
     )
