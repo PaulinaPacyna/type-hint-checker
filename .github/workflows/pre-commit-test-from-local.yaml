@@ -22,9 +22,10 @@ jobs:
         python-version: "3.8"
     - name: Install dependencies
       run: |
+        set -e
         python -m pip install --upgrade pip
         pip install pre-commit pytest
-        pre-commit install -c tests/configs/strict.yaml
+        pre-commit install
         pre-commit run --all-files || true #  For pre-commit initialization
     - name: Test with pytest
       run: |
