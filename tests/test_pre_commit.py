@@ -8,7 +8,7 @@ def run_command(command: str) -> subprocess.CompletedProcess:
     if shell_path:
         command = f'{shell_path}, -c "{command}"'
     return subprocess.run(
-        command, capture_output=True, universal_newlines=True, check=False
+        command.split(), capture_output=True, universal_newlines=True, check=False
     )
 
 
