@@ -1,0 +1,10 @@
+
+repos:
+  - repo: local
+    hooks:
+      - id: annotation_checker
+        name: annotation_checker
+        entry: annotation_checker
+        language: python
+        files: '.py$'
+        args: [ --exclude_files=annotation_checker, --log-level=DEBUG]
