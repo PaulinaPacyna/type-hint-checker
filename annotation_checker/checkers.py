@@ -124,10 +124,10 @@ class FunctionChecker(Checker):
         ----------
             function (ast.FunctionDef): the function to be checked
         """
-        args = function.args
+        args = function.args.args
         if self._exclude_self:
             args = args[1:]
-        for argument in args.args:
+        for argument in args:
             if not argument.annotation:
                 if self.__check_if_not_excluded(argument.arg):
                     self._errors.append(
