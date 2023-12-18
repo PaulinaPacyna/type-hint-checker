@@ -15,6 +15,12 @@ NO_ARGS = "tests/cases/no_args.py"
 NOT_A_FUNCTION = "tests/cases/not_a_function.py"
 STRING_ANNOTATION = "tests/cases/string_annotation.py"
 MIXED_ARGS_WITH_RETURN = "tests/cases/mixed_args_with_return.py"
+COMMENT_ABOVE = "tests/cases/comment_above.py"
+COMMENT_BELOW = "tests/cases/comment_below.py"
+COMMENT_BODY = "tests/cases/comment_body.py"
+COMMENT_HEADER = "tests/cases/comment_header.py"
+COMMENT_LONG_HEADER = "tests/cases/comment_long_header.py"
+COMMENT_LONG_HEADER_2 = "tests/cases/comment_long_header_2.py"
 
 
 @fixture
@@ -32,6 +38,12 @@ def incorrect_file() -> str:
         (NOT_A_FUNCTION, True),
         (STRING_ANNOTATION, True),
         (MIXED_ARGS_WITH_RETURN, False),
+        (COMMENT_ABOVE, False),
+        (COMMENT_BELOW, False),
+        (COMMENT_BODY, True),
+        (COMMENT_HEADER, True),
+        (COMMENT_LONG_HEADER, True),
+        (COMMENT_LONG_HEADER_2, True),
     ],
 )
 def test_check_annotated(input_path, result) -> None:
