@@ -3,5 +3,5 @@
   description: Check that all python files are annotated
   entry: annotation_checker
   language: python
-  files: ".py"
+  files: ".py$"
   args: [--strict=True]

@@ -1,8 +1,4 @@
 repos:
-  - repo: https://github.com/psf/black
-    rev: 23.9.1
-    hooks:
-    - id: black
   - repo: local
     hooks:
       - id: annotation_checker
@@ -10,4 +6,4 @@ repos:
         entry: annotation_checker
         language: python
         files: '.py'
-        args: [--log-level=DEBUG, --strict=True, --exclude_files=tests, --exclude_self=True]
+        args: [--strict=True, --exclude_files=^(?!.*tests/cases).*$]

@@ -1,0 +1,33 @@
+name: Install precommit and test feature
+
+on:
+  workflow_dispatch:
+  push:
+    branches_ignore:
+      - "main"
+      - "release/*"
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+    - name: Set up Python 3.8
+      uses: actions/setup-python@v3
+      with:
+        python-version: "3.8"
+    - name: Install dependencies
+      run: |
+        set -e
+        python -m pip install --upgrade pip
+        pip install pre-commit pytest
+        pip install .
+        pre-commit install
+        pre-commit run --all-files || true #  For pre-commit initialization
+    - name: Test with pytest
+      run: |
+        python -m pytest tests/test_pre_commit.py
