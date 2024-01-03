@@ -106,7 +106,7 @@ def parse_arguments() -> argparse.Namespace:
         choices=["INFO", "DEBUG"],
     )
     parser.add_argument(
-        "--exclusion-comment",
+        "--exclusion_comment",
         help="If this phrase appears in the comment, the item is excluded. Default : "
         "'no-check'",
         type=str,

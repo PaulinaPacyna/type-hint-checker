@@ -7,6 +7,7 @@ MIXED_ARGS = "tests/cases/mixed_args.py"
 NO_ARGS = "tests/cases/no_args.py"
 NOT_A_FUNCTION = "tests/cases/not_a_function.py"
 MIXED_ARGS_WITH_RETURN = "tests/cases/mixed_args_with_return.py"
+DIFFERENT_COMMENT = "tests/cases/different_comment.py"
 
 
 def test_running_cli_version() -> None:
@@ -115,3 +116,26 @@ def test_debug_level():
     )
     assert "DEBUG:annotation_checker" in process.stderr
     assert "INFO:annotation_checker" in process.stderr
+
+
+def test_exclusion_comment():
+    process = subprocess.run(
+        [
+            "annotation_checker",
+            DIFFERENT_COMMENT,
+            "--exclusion_comment=custom" "--strict=True",
+        ],
+        capture_output=True,
+        universal_newlines=True,
+    )
+    assert process.returncode == 0
+    process = subprocess.run(
+        [
+            "annotation_checker",
+            DIFFERENT_COMMENT,
+            "--strict=True",
+        ],
+        capture_output=True,
+        universal_newlines=True,
+    )
+    assert process.returncode == 1
