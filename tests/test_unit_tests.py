@@ -18,6 +18,7 @@ MIXED_ARGS_WITH_RETURN = "tests/cases/mixed_args_with_return.py"
 COMMENT_ABOVE = "tests/cases/comment_above.py"
 COMMENT_BELOW = "tests/cases/comment_below.py"
 COMMENT_BODY = "tests/cases/comment_body.py"
+MANY_COMMENTS = "tests/cases/many_comments.py"
 COMMENT_HEADER = "tests/cases/comment_header.py"
 COMMENT_LONG_HEADER = "tests/cases/comment_long_header.py"
 COMMENT_LONG_HEADER_2 = "tests/cases/comment_long_header_2.py"
@@ -41,6 +42,7 @@ def incorrect_file() -> str:
         (COMMENT_ABOVE, False),
         (COMMENT_BELOW, False),
         (COMMENT_BODY, True),
+        (MANY_COMMENTS, True),
         (COMMENT_HEADER, True),
         (COMMENT_LONG_HEADER, True),
         (COMMENT_LONG_HEADER_2, True),
