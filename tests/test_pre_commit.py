@@ -51,6 +51,12 @@ def test_run_all() -> None:
         "for argument b (function f1), line 4",
         "INFO:annotation_checker:tests/cases/different_comment.py: Missing return "
         "annotation for function f1, line 4",
+        "INFO:annotation_checker:tests/cases/mixed_args_class.py: Missing annotation "
+        "for argument a (function f1), line 4",
+        "INFO:annotation_checker:tests/cases/mixed_args_class.py: Missing return "
+        "annotation for function f1, line 4",
+        "INFO:annotation_checker:tests/cases/no_return_class.py: Missing return "
+        "annotation for function f1, line 4",
     }
     assert process.returncode == 1
 
