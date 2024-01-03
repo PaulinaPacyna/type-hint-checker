@@ -3,10 +3,9 @@ import re
 import sys
 from typing import List
 import logging
-import ast
 
 from annotation_checker.checkers import FunctionChecker, ClassChecker
-from annotation_checker.exceptions import IncorrectFileException
+from annotation_checker.file_parser import FileParser
 
 logger = logging.getLogger("annotation_checker")
 logging.basicConfig()
@@ -15,8 +14,9 @@ logging.basicConfig()
 def check_annotated(
     file_list: List[str],
     exclude_parameters: str = "",
-    exclude_self: bool = False,
+    exclude_self: bool = True,
     exclude_by_name: str = "",
+    exclusion_comment: str = "no-check",
 ) -> bool:
     """
     Iterates through the list of file paths, parses the files and checks if all
@@ -30,36 +30,32 @@ def check_annotated(
                             methods
         exclude_by_name: str - Regex specifying names of functions, methods and classes
                             that should not be checked
+        exclusion_comment : str - if this phrase appears in the comment, the item is
+                                not checked for type hints presence
     Returns
     ----------
         True if all files are type-annotated.
     """
     result = True
     for filename in file_list:
-        with open(filename, "r", encoding="utf-8") as file:
-            content = file.read()
-            try:
-                body = ast.parse(content).body
-            except SyntaxError as exc:
-                raise IncorrectFileException(
-                    f"File could not be parsed: {filename}"
-                ) from exc
-            for item in body:
-                if isinstance(item, ast.FunctionDef):
-                    checker = FunctionChecker(
-                        exclude_parameters=exclude_parameters,
-                        exclude_by_name=exclude_by_name,
-                    )
-                elif isinstance(item, ast.ClassDef):
-                    checker = ClassChecker(
-                        exclude_parameters=exclude_parameters,
-                        exclude_self=exclude_self,
-                        exclude_by_name=exclude_by_name,
-                    )
-                else:
-                    continue
-                result = checker.check(item) and result
-                checker.log_results(logger, filename=filename)
+        file = FileParser(
+            filename,
+            excluded_names=exclude_by_name,
+            exclusion_comment=exclusion_comment,
+        )
+        function_checker = FunctionChecker(
+            exclude_parameters=exclude_parameters, exclude_self=False
+        )
+        class_checker = ClassChecker(
+            exclude_parameters=exclude_parameters, exclude_self=exclude_self
+        )
+
+        for function in file.functions:
+            result = function_checker.check(function) and result
+            function_checker.log_results(logger, filename=filename)
+        for class_ in file.classes:
+            result = class_checker.check(class_) and result
+            class_checker.log_results(logger, filename=filename)
     return result
 
 
@@ -109,6 +105,13 @@ def parse_arguments() -> argparse.Namespace:
         default="INFO",
         choices=["INFO", "DEBUG"],
     )
+    parser.add_argument(
+        "--exclusion_comment",
+        help="If this phrase appears in the comment, the item is excluded. Default : "
+        "'no-check'",
+        type=str,
+        default="no-check",
+    )
 
     args = parser.parse_args()
     return args
@@ -148,6 +151,7 @@ def main() -> None:
         exclude_parameters=args.exclude_parameters,
         exclude_self=args.exclude_self,
         exclude_by_name=args.exclude_by_name,
+        exclusion_comment=args.exclusion_comment,
     )
     if args.strict and exit_code:
         sys.exit(exit_code)

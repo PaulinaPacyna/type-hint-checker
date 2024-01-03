@@ -15,6 +15,14 @@ NO_ARGS = "tests/cases/no_args.py"
 NOT_A_FUNCTION = "tests/cases/not_a_function.py"
 STRING_ANNOTATION = "tests/cases/string_annotation.py"
 MIXED_ARGS_WITH_RETURN = "tests/cases/mixed_args_with_return.py"
+COMMENT_ABOVE = "tests/cases/comment_above.py"
+COMMENT_BELOW = "tests/cases/comment_below.py"
+COMMENT_BODY = "tests/cases/comment_body.py"
+MANY_COMMENTS = "tests/cases/many_comments.py"
+DIFFERENT_COMMENT = "tests/cases/different_comment.py"
+COMMENT_HEADER = "tests/cases/comment_header.py"
+COMMENT_LONG_HEADER = "tests/cases/comment_long_header.py"
+COMMENT_LONG_HEADER_2 = "tests/cases/comment_long_header_2.py"
 
 
 @fixture
@@ -32,10 +40,31 @@ def incorrect_file() -> str:
         (NOT_A_FUNCTION, True),
         (STRING_ANNOTATION, True),
         (MIXED_ARGS_WITH_RETURN, False),
+        (COMMENT_ABOVE, False),
+        (COMMENT_BELOW, False),
+        (COMMENT_BODY, True),
+        (MANY_COMMENTS, True),
+        (COMMENT_HEADER, True),
+        (COMMENT_LONG_HEADER, True),
+        (COMMENT_LONG_HEADER_2, True),
     ],
 )
-def test_check_annotated(input_path, result) -> None:
+def test_check_annotated(input_path: str, result: bool) -> None:
     assert check_annotated([input_path]) == result
+
+
+@pytest.mark.parametrize(
+    "input_path,exclusion_comment,result",
+    [
+        (COMMENT_BODY, "jdncajbc", False),
+        (COMMENT_BODY, "custom", False),
+        (DIFFERENT_COMMENT, "custom", True),
+    ],
+)
+def test_custom_exclusion_comment(
+    input_path: str, exclusion_comment: str, result: bool
+) -> None:
+    assert check_annotated([input_path], exclusion_comment=exclusion_comment) == result
 
 
 def test_incorrect_file(incorrect_file, tmp_path: pathlib.Path) -> None:
