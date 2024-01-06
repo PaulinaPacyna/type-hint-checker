@@ -28,6 +28,7 @@ MIXED_ARGS_CLASS = "tests/cases/mixed_args_class.py"
 NO_RETURN_CLASS = "tests/cases/no_return_class.py"
 PROPERLY_ANNOTATED_CLASS = "tests/cases/properly_annotated_class.py"
 STATIC_FUNCTION_CLASS = "tests/cases/static_function_class.py"
+ANNOTATED_SELF_CLASS = "tests/cases/annotated_self_class.py"
 
 
 @fixture
@@ -159,5 +160,7 @@ def test_in_a_class(input_path, result) -> None:
 
 
 def test_exclude_self() -> None:
-    assert check_annotated([STATIC_FUNCTION_CLASS], exclude_by_name="") == False
-    assert check_annotated([PROPERLY_ANNOTATED_CLASS], exclude_by_name="") == False
+    assert check_annotated([STATIC_FUNCTION_CLASS], exclude_parameters="") == False
+    assert check_annotated([PROPERLY_ANNOTATED_CLASS], exclude_parameters="") == False
+    assert check_annotated([PROPERLY_ANNOTATED_CLASS]) == True
+    assert check_annotated([ANNOTATED_SELF_CLASS], exclude_parameters="") == True

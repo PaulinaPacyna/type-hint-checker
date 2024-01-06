@@ -57,6 +57,8 @@ def test_run_all() -> None:
         "annotation for function f1, line 4",
         "INFO:annotation_checker:tests/cases/no_return_class.py: Missing return "
         "annotation for function f1, line 4",
+        "INFO:annotation_checker:tests/cases/static_function_class.py: Missing "
+        "annotation for argument a (function f1), line 5",
     }
     assert process.returncode == 1
 
