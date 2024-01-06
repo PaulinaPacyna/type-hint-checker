@@ -123,7 +123,8 @@ def test_exclusion_comment():
         [
             "annotation_checker",
             DIFFERENT_COMMENT,
-            "--exclusion_comment=custom" "--strict=True",
+            "--exclusion_comment=custom",
+            "--strict=True",
         ],
         capture_output=True,
         universal_newlines=True,
