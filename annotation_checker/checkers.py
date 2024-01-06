@@ -105,14 +105,14 @@ class FunctionChecker(Checker):
         args = function.args.args
         for argument in args:
             if not argument.annotation:
-                if self.__check_if_not_excluded(argument.arg):
+                if self.__check_if_param_should_be_checked(argument.arg):
                     self._errors.append(
                         f"Missing annotation for argument {argument.arg} "
                         f"(function {function.name}), line {function.lineno}"
                     )
 
-    def __check_if_not_excluded(self, argument: str) -> bool:
-        """Returns False if the argument should not be checked.
+    def __check_if_param_should_be_checked(self, argument: str) -> bool:
+        """Returns True if the argument should be checked.
         Parameters
         ----------
             argument (str): - the arguments' name
