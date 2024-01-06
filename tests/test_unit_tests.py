@@ -159,5 +159,5 @@ def test_in_a_class(input_path, result) -> None:
 
 
 def test_exlude_self() -> None:
-    assert check_annotated([STATIC_FUNCTION_CLASS], exclude_self=False) == False
-    assert check_annotated([PROPERLY_ANNOTATED_CLASS], exclude_self=False) == False
+    assert check_annotated([STATIC_FUNCTION_CLASS], exclude_by_name="") == False
+    assert check_annotated([PROPERLY_ANNOTATED_CLASS], exclude_by_name="") == False
