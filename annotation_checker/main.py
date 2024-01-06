@@ -13,8 +13,7 @@ logging.basicConfig()
 
 def check_annotated(
     file_list: List[str],
-    exclude_parameters: str = "",
-    exclude_self: bool = True,
+    exclude_parameters: str = "^self$",
     exclude_by_name: str = "",
     exclusion_comment: str = "no-check",
 ) -> bool:
@@ -26,8 +25,6 @@ def check_annotated(
         file_list: List[str] - Filenames to be checked by
         exclude_parameters: str - regex specifying which parameters should not be
                             checked
-        exclude_self: bool - if True, omit type checking for the first parameter in
-                            methods
         exclude_by_name: str - Regex specifying names of functions, methods and classes
                             that should not be checked
         exclusion_comment : str - if this phrase appears in the comment, the item is
@@ -43,12 +40,8 @@ def check_annotated(
             excluded_names=exclude_by_name,
             exclusion_comment=exclusion_comment,
         )
-        function_checker = FunctionChecker(
-            exclude_parameters=exclude_parameters, exclude_self=False
-        )
-        class_checker = ClassChecker(
-            exclude_parameters=exclude_parameters, exclude_self=exclude_self
-        )
+        function_checker = FunctionChecker(exclude_parameters=exclude_parameters)
+        class_checker = ClassChecker(exclude_parameters=exclude_parameters)
 
         for function in file.functions:
             result = function_checker.check(function) and result
@@ -74,12 +67,6 @@ def parse_arguments() -> argparse.Namespace:
         default=False,
     )
     parser.add_argument(
-        "--exclude_self",
-        help="If True, omit type checking for the first parameter in methods.",
-        type=bool,
-        default=True,
-    )
-    parser.add_argument(
         "--exclude_files",
         help="Regex specifying which files should not be checked",
         type=str,
@@ -89,7 +76,7 @@ def parse_arguments() -> argparse.Namespace:
         "--exclude_parameters",
         help="Regex specifying which parameters should not be checked",
         type=str,
-        default="",
+        default="^self$",
     )
     parser.add_argument(
         "--exclude_by_name",
@@ -149,7 +136,6 @@ def main() -> None:
     exit_code = 1 - check_annotated(
         files,
         exclude_parameters=args.exclude_parameters,
-        exclude_self=args.exclude_self,
         exclude_by_name=args.exclude_by_name,
         exclusion_comment=args.exclusion_comment,
     )

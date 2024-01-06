@@ -11,21 +11,17 @@ class Checker(ABC):
     ----------
         exclude_parameters (str): regex specifying which parameters should not be
                                 checked
-        exclude_self (bool): if True, omit type checking for the first parameter in
-                                method
         exclude_by_name: str - Regex specifying names of functions, methods and classes
                                 that should not be checked
     """
 
     def __init__(
         self,
-        exclude_parameters: str = "",
-        exclude_self: bool = False,
+        exclude_parameters: str = "^self$",
         exclude_by_name: str = "",
     ) -> None:
         self._errors = []
         self._exclude_parameters = exclude_parameters
-        self._exclude_self = exclude_self
         self._exclude_by_name = exclude_by_name
 
     @abstractmethod
@@ -71,8 +67,6 @@ class FunctionChecker(Checker):
     ----------
         exclude_parameters (str): regex specifying which parameters should not be
                                 checked
-        exclude_self (bool): if True, omit type checking for the first parameter in
-                                method
         exclude_by_name: str - Regex specifying names of functions, methods and classes
                                 that should not be checked
     """
@@ -80,12 +74,10 @@ class FunctionChecker(Checker):
     def __init__(
         self,
         exclude_parameters: str = "",
-        exclude_self: bool = False,
         exclude_by_name: str = "",
     ) -> None:
         super().__init__(
             exclude_parameters=exclude_parameters,
-            exclude_self=exclude_self,
             exclude_by_name=exclude_by_name,
         )
 
@@ -111,18 +103,16 @@ class FunctionChecker(Checker):
             function (ast.FunctionDef): the function to be checked
         """
         args = function.args.args
-        if self._exclude_self:
-            args = args[1:]
         for argument in args:
             if not argument.annotation:
-                if self.__check_if_not_excluded(argument.arg):
+                if self.__check_if_param_should_be_checked(argument.arg):
                     self._errors.append(
                         f"Missing annotation for argument {argument.arg} "
                         f"(function {function.name}), line {function.lineno}"
                     )
 
-    def __check_if_not_excluded(self, argument: str) -> bool:
-        """Returns False if the argument should not be checked.
+    def __check_if_param_should_be_checked(self, argument: str) -> bool:
+        """Returns True if the argument should be checked.
         Parameters
         ----------
             argument (str): - the arguments' name
@@ -155,8 +145,6 @@ class ClassChecker(Checker):
     ----------
         exclude_parameters (str): regex specifying which parameters should not be
                                 checked
-        exclude_self (bool): if True, omit type checking for the first parameter in
-                                methods
         exclude_by_name: str - Regex specifying names of functions, methods and classes
                                 that should not be checked
     """
@@ -164,12 +152,10 @@ class ClassChecker(Checker):
     def __init__(
         self,
         exclude_parameters: List[str] = (),
-        exclude_self: bool = True,
         exclude_by_name: str = "",
     ) -> None:
         super().__init__(
             exclude_parameters=exclude_parameters,
-            exclude_self=exclude_self,
             exclude_by_name=exclude_by_name,
         )
 
@@ -188,7 +174,6 @@ class ClassChecker(Checker):
         for method in item.body:
             if isinstance(method, ast.FunctionDef):
                 function_checker = FunctionChecker(
-                    exclude_self=self._exclude_self,
                     exclude_parameters=self._exclude_parameters,
                     exclude_by_name=self._exclude_by_name,
                 )

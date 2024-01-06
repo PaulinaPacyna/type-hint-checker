@@ -23,6 +23,12 @@ DIFFERENT_COMMENT = "tests/cases/different_comment.py"
 COMMENT_HEADER = "tests/cases/comment_header.py"
 COMMENT_LONG_HEADER = "tests/cases/comment_long_header.py"
 COMMENT_LONG_HEADER_2 = "tests/cases/comment_long_header_2.py"
+EMPTY_CLASS = "tests/cases/empty_class.py"
+MIXED_ARGS_CLASS = "tests/cases/mixed_args_class.py"
+NO_RETURN_CLASS = "tests/cases/no_return_class.py"
+PROPERLY_ANNOTATED_CLASS = "tests/cases/properly_annotated_class.py"
+STATIC_FUNCTION_CLASS = "tests/cases/static_function_class.py"
+ANNOTATED_SELF_CLASS = "tests/cases/annotated_self_class.py"
 
 
 @fixture
@@ -137,3 +143,24 @@ def testing_multiple_files(caplog):
     with caplog.at_level(logging.INFO):
         check_annotated(file_list)
         assert all(filename in caplog.text for filename in file_list)
+
+
+@pytest.mark.parametrize(
+    "input_path,result",
+    [
+        (EMPTY_CLASS, True),
+        (MIXED_ARGS_CLASS, False),
+        (NO_RETURN_CLASS, False),
+        (PROPERLY_ANNOTATED_CLASS, True),
+        (STATIC_FUNCTION_CLASS, False),
+    ],
+)
+def test_in_a_class(input_path, result) -> None:
+    assert check_annotated([input_path]) == result
+
+
+def test_exclude_self() -> None:
+    assert check_annotated([STATIC_FUNCTION_CLASS], exclude_parameters="") == False
+    assert check_annotated([PROPERLY_ANNOTATED_CLASS], exclude_parameters="") == False
+    assert check_annotated([PROPERLY_ANNOTATED_CLASS]) == True
+    assert check_annotated([ANNOTATED_SELF_CLASS], exclude_parameters="") == True
