@@ -5,5 +5,6 @@ repos:
         name: annotation_checker
         entry: annotation_checker
         language: python
-        files: '.py'
+        files: '.py$'
         args: [--strict=True, --exclude_files=^(?!.*tests/cases).*$]
+        verbose: true

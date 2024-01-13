@@ -7,4 +7,5 @@ repos:
         entry: annotation_checker
         language: python
         files: '.py$'
-        args: [ --exclude_files=annotation_checker, --log-level=DEBUG]
+        args: [ --exclude_files=^(?!.*tests/cases).*$]
+        verbose: true
