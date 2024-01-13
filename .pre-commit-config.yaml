@@ -11,3 +11,4 @@ repos:
         language: python
         files: '.py'
         args: [--log-level=DEBUG, --strict=True, --exclude_files=tests, --exclude_parameters=^self$]
+        verbose: true
