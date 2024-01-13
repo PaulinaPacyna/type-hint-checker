@@ -64,8 +64,6 @@ def parse_arguments() -> argparse.Namespace:
         "--exit_zero",
         action="store_true",
         help="If this flag is checked, the program always exits with 0 (success) code.",
-        type=bool,
-        default=True,
     )
     parser.add_argument(
         "--exclude_files",
