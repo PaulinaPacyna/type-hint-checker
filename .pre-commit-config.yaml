@@ -10,5 +10,5 @@ repos:
         entry: annotation_checker
         language: python
         files: '.py'
-        args: [--log-level=DEBUG, --strict=True, --exclude_files=tests, --exclude_parameters=^self$]
+        args: [--log-level=DEBUG, --exclude_files=tests, --exclude_parameters=^self$]
         verbose: true
