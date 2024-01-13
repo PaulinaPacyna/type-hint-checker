@@ -61,8 +61,9 @@ def parse_arguments() -> argparse.Namespace:
         "filenames", help="Files to be checked by annotation_checker.", nargs="+"
     )
     parser.add_argument(
-        "--strict",
-        help="If True and checks fails, exit the program with 1 code.",
+        "--exit_zero",
+        action="store_true",
+        help="If this flag is checked, the program always exits with 0 (success) code.",
         type=bool,
         default=True,
     )
@@ -139,7 +140,7 @@ def main() -> None:
         exclude_by_name=args.exclude_by_name,
         exclusion_comment=args.exclusion_comment,
     )
-    if args.strict and exit_code:
+    if not args.exit_zero and exit_code:
         sys.exit(exit_code)
 
 
