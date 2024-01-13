@@ -1,5 +1,6 @@
 import os
 import subprocess
+from typing import Set
 
 RUN_ALL_OUTPUT = {
     "",
@@ -44,7 +45,7 @@ RUN_ALL_OUTPUT = {
 
 
 def run_command(command: str) -> subprocess.CompletedProcess:
-    """Common interface for executing command line programms"""
+    """Common interface for executing command line programs"""
     return subprocess.run(
         command.split(), capture_output=True, universal_newlines=True, check=False
     )
@@ -55,9 +56,9 @@ def test_run_all() -> None:
     process = run_command(
         "pre-commit run annotation_checker --all-files -c tests/configs/strict.yaml"
     )
-    lines = process.stdout.split("\n")
-    lines = [line.strip() for line in lines]
-    assert set(lines) == {
+    output = process.stdout
+    lines = prepare_output(output)
+    assert lines == {
         *RUN_ALL_OUTPUT,
         "annotation_checker......................................................."
         "Failed",
@@ -72,13 +73,23 @@ def test_run_all_not_strict() -> None:
     process = run_command(
         "pre-commit run annotation_checker --all-files -c tests/configs/not-strict.yaml"
     )
-    print(process.args)
-    lines = process.stdout.split("\n") + process.stderr.split("\n")
-    lines = [line.strip() for line in lines]
-    print(lines)
+    output = process.stdout
+    lines = prepare_output(output)
     assert process.returncode == 0
-    assert set(lines) == {
+    assert lines == {
         *RUN_ALL_OUTPUT,
         "annotation_checker......................................................."
         "Passed",
+        "- hook id: annotation_checker",
     }
+
+
+def prepare_output(output: str) -> Set[str]:
+    """Prepares the output of the pylint program by splitting the lines, trimming and removing unnecessary output
+    Parameters:
+        output (str) - output of the command line program"""
+    lines = output.split("\n")
+    trimmed = [line.strip() for line in lines]
+    result = [line for line in trimmed if "- duration: " not in line]
+
+    return set(result)
