@@ -1,5 +1,5 @@
 # Annotation checker 
-Checks that arguments in functions and methods are annotated. _Annotation checker_ is intended to be used as a [pre-commit](https://pre-commit.com/) hook.
+Checks that the parameters in functions and methods are annotated. _Annotation checker_ is intended to be used as a [pre-commit](https://pre-commit.com/) hook.
 
 ## Quick start
 1. Install pre-commit hooks [https://pre-commit.com/#install](https://pre-commit.com/#install)

@@ -83,7 +83,7 @@ class FunctionChecker(Checker):
 
     def check(self, item: ast.FunctionDef) -> bool:
         """
-        Checks that the function is annotated (arguments and return type).
+        Checks that the function is annotated (parameters and return type).
         Parameters
         ----------
             item (ast.FunctionDef): the function to be checked
@@ -92,36 +92,36 @@ class FunctionChecker(Checker):
         bool
             True if correctly annotated
         """
-        self.__check_args(item)
+        self.__check_parameters(item)
         self.__check_return(item)
         return not bool(self._errors)
 
-    def __check_args(self, function: ast.FunctionDef) -> None:
-        """Check that the arguments of a function are correctly type-annotated.
+    def __check_parameters(self, function: ast.FunctionDef) -> None:
+        """Check that the parameters of a function are type-annotated.
         Parameters
         ----------
             function (ast.FunctionDef): the function to be checked
         """
-        args = function.args.args
-        for argument in args:
-            if not argument.annotation:
-                if self.__check_if_param_should_be_checked(argument.arg):
+        parameters = function.args.args
+        for parameter in parameters:
+            if not parameter.annotation:
+                if self.__check_if_param_should_be_checked(parameter.arg):
                     self._errors.append(
-                        f"Missing annotation for argument {argument.arg} "
+                        f"Missing annotation for parameter {parameter.arg} "
                         f"(function {function.name}), line {function.lineno}"
                     )
 
-    def __check_if_param_should_be_checked(self, argument: str) -> bool:
-        """Returns True if the argument should be checked.
+    def __check_if_param_should_be_checked(self, parameter: str) -> bool:
+        """Returns True if the parameter should be checked.
         Parameters
         ----------
-            argument (str): - the arguments' name
+            parameter (str): - the parameters' name
         Returns
         ---------
             bool
         """
         return not self._exclude_parameters or not re.search(
-            self._exclude_parameters, argument
+            self._exclude_parameters, parameter
         )
 
     def __check_return(self, function: ast.FunctionDef) -> None:

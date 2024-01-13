@@ -3,10 +3,10 @@ import subprocess
 import pytest
 
 NO_RETURN = "tests/cases/no_return.py"
-MIXED_ARGS = "tests/cases/mixed_args.py"
-NO_ARGS = "tests/cases/no_args.py"
+MIXED_ARGS = "tests/cases/mixed_parameters.py"
+NO_ARGS = "tests/cases/no_parameters.py"
 NOT_A_FUNCTION = "tests/cases/not_a_function.py"
-MIXED_ARGS_WITH_RETURN = "tests/cases/mixed_args_with_return.py"
+MIXED_ARGS_WITH_RETURN = "tests/cases/mixed_parameters_with_return.py"
 DIFFERENT_COMMENT = "tests/cases/different_comment.py"
 
 
