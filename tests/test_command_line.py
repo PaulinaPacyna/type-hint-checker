@@ -48,6 +48,23 @@ def test_exit_code(filename: str, result: int) -> None:
     assert result == process.returncode
 
 
+@pytest.mark.parametrize(
+    "filename",
+    [
+        MIXED_ARGS,
+        NO_RETURN,
+        MIXED_ARGS_WITH_RETURN,
+    ],
+)
+def test_exit_code_with_exit_zero(filename: str) -> None:
+    process = subprocess.run(
+        ["annotation_checker", filename, "--exit_zero"],
+        capture_output=True,
+        universal_newlines=True,
+    )
+    assert process.returncode == 0
+
+
 def test_logging_filepath() -> None:
     process = subprocess.run(
         ["annotation_checker", NO_RETURN],
