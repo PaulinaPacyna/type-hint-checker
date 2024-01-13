@@ -64,7 +64,7 @@ def parse_arguments() -> argparse.Namespace:
         "--strict",
         help="If True and checks fails, exit the program with 1 code.",
         type=bool,
-        default=False,
+        default=True,
     )
     parser.add_argument(
         "--exclude_files",
