@@ -22,43 +22,43 @@ def test_run_all() -> None:
         "Failed",
         "- hook id: annotation_checker",
         "- exit code: 1",
-        "INFO:annotation_checker:tests/cases/mixed_args.py: Missing annotation for "
-        "argument a "
+        "INFO:annotation_checker:tests/cases/mixed_parameters.py: Missing annotation for "
+        "parameter a "
         "(function f1), line 1",
-        "INFO:annotation_checker:tests/cases/mixed_args.py: Missing return annotation "
+        "INFO:annotation_checker:tests/cases/mixed_parameters.py: Missing return annotation "
         "for function f1, line 1",
         "INFO:annotation_checker:tests/cases/no_return.py: Missing return annotation "
         "for "
         "function f1, line 1",
-        "INFO:annotation_checker:tests/cases/mixed_args_with_return.py: Missing "
+        "INFO:annotation_checker:tests/cases/mixed_parameters_with_return.py: Missing "
         "annotation for "
-        "argument test_aa (function f5), line 1",
+        "parameter test_aa (function f5), line 1",
         "INFO:annotation_checker:tests/cases/comment_above.py: Missing annotation for "
-        "argument a (function f1), line 5",
+        "parameter a (function f1), line 5",
         "INFO:annotation_checker:tests/cases/comment_above.py: Missing annotation for "
-        "argument b (function f1), line 5",
+        "parameter b (function f1), line 5",
         "INFO:annotation_checker:tests/cases/comment_above.py: Missing return "
         "annotation for function f1, line 5",
         "INFO:annotation_checker:tests/cases/comment_below.py: Missing annotation for "
-        "argument a (function f1), line 4",
+        "parameter a (function f1), line 4",
         "INFO:annotation_checker:tests/cases/comment_below.py: Missing annotation for "
-        "argument b (function f1), line 4",
+        "parameter b (function f1), line 4",
         "INFO:annotation_checker:tests/cases/comment_below.py: Missing return "
         "annotation for function f1, line 4",
         "INFO:annotation_checker:tests/cases/different_comment.py: Missing annotation "
-        "for argument a (function f1), line 4",
+        "for parameter a (function f1), line 4",
         "INFO:annotation_checker:tests/cases/different_comment.py: Missing annotation "
-        "for argument b (function f1), line 4",
+        "for parameter b (function f1), line 4",
         "INFO:annotation_checker:tests/cases/different_comment.py: Missing return "
         "annotation for function f1, line 4",
-        "INFO:annotation_checker:tests/cases/mixed_args_class.py: Missing annotation "
-        "for argument a (function f1), line 4",
-        "INFO:annotation_checker:tests/cases/mixed_args_class.py: Missing return "
+        "INFO:annotation_checker:tests/cases/mixed_parameters_class.py: Missing annotation "
+        "for parameter a (function f1), line 4",
+        "INFO:annotation_checker:tests/cases/mixed_parameters_class.py: Missing return "
         "annotation for function f1, line 4",
         "INFO:annotation_checker:tests/cases/no_return_class.py: Missing return "
         "annotation for function f1, line 4",
         "INFO:annotation_checker:tests/cases/static_function_class.py: Missing "
-        "annotation for argument a (function f1), line 5",
+        "annotation for parameter a (function f1), line 5",
     }
     assert process.returncode == 1
 
