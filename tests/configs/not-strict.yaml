@@ -7,5 +7,5 @@ repos:
         entry: annotation_checker
         language: python
         files: '.py$'
-        args: [ --exclude_files=^(?!.*tests/cases).*$]
+        args: [ --exclude_files=^(?!.*tests/cases).*$, --exit_zero,]
         verbose: true

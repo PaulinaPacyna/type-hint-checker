@@ -75,13 +75,13 @@ def test_run_all_not_strict() -> None:
     )
     output = process.stdout
     lines = prepare_output(output)
-    assert process.returncode == 0
     assert lines == {
         *RUN_ALL_OUTPUT,
         "annotation_checker......................................................."
         "Passed",
         "- hook id: annotation_checker",
     }
+    assert process.returncode == 0
 
 
 def prepare_output(output: str) -> Set[str]:

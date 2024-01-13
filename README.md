@@ -19,7 +19,11 @@ Checks that the parameters in functions and methods are annotated. _Annotation c
          entry: annotation_checker
          language: python
          files: ".py"
-         args: [--strict=True]
+         args: [--exit_zero, # always exit with 0 code
+                --exclude_files=tests, 
+                --exclude_parameters=^self$,
+         ]
+        verbose: true
    ```
 3. Install the pre-commit hook
    ```

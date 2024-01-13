@@ -18,7 +18,6 @@ def test_exclude_files() -> None:
     process = subprocess.run(
         [
             "annotation_checker",
-            "--strict=True",
             r"--exclude_files=no_.*\.py",
             NO_ARGS,
             NO_RETURN,
@@ -42,11 +41,28 @@ def test_exclude_files() -> None:
 )
 def test_exit_code(filename: str, result: int) -> None:
     process = subprocess.run(
-        ["annotation_checker", "--strict=True", filename],
+        ["annotation_checker", filename],
         capture_output=True,
         universal_newlines=True,
     )
     assert result == process.returncode
+
+
+@pytest.mark.parametrize(
+    "filename",
+    [
+        MIXED_ARGS,
+        NO_RETURN,
+        MIXED_ARGS_WITH_RETURN,
+    ],
+)
+def test_exit_code_with_exit_zero(filename: str) -> None:
+    process = subprocess.run(
+        ["annotation_checker", filename, "--exit_zero"],
+        capture_output=True,
+        universal_newlines=True,
+    )
+    assert process.returncode == 0
 
 
 def test_logging_filepath() -> None:
@@ -69,7 +85,6 @@ def test_exclude_parameters(pattern: str, result: int) -> None:
     process = subprocess.run(
         [
             "annotation_checker",
-            "--strict=True",
             MIXED_ARGS_WITH_RETURN,
             f"--exclude_parameters={pattern}",
         ],
@@ -98,7 +113,6 @@ def test_exclude_by_name(input_: str, pattern: str, result: int) -> None:
     process = subprocess.run(
         [
             "annotation_checker",
-            "--strict=True",
             input_,
             f"--exclude_by_name={pattern}",
         ],
@@ -124,7 +138,6 @@ def test_exclusion_comment():
             "annotation_checker",
             DIFFERENT_COMMENT,
             "--exclusion_comment=custom",
-            "--strict=True",
         ],
         capture_output=True,
         universal_newlines=True,
@@ -134,7 +147,6 @@ def test_exclusion_comment():
         [
             "annotation_checker",
             DIFFERENT_COMMENT,
-            "--strict=True",
         ],
         capture_output=True,
         universal_newlines=True,

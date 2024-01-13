@@ -4,4 +4,4 @@
   entry: annotation_checker
   language: python
   files: ".py$"
-  args: [--strict=True]
+  args: []
