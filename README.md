@@ -59,7 +59,7 @@ It is understandable that there are different coding standards. You can customiz
 | `--exclude_files` | Regex specifying which files should not be checked. | Empty (all files are checked) | `"--exclude_files=^test_"` |
 | `--exclude_parameters` | Regex specifying which parameters should not be checked. | `^self$` | `"--exclude_parameters=''"` (check all params) `"--exclude_parameters='(^self$|logger)'"` |
 | `--exclude_by_name` | Regex specifying names of functions, methods and classes that should not be checked | Empty (all functions, classes and methods are checked). | `"--exclude_by_name=^test_"` |
-| `--log-level` | If set to debug, dispalays more logs. | `INFO` | `"--log-level=INFO"`,`"--log-level=DEBUG"` |
+| `--log-level` | If set to `DEBUG`, displays more logs. | `INFO` | `"--log-level=INFO"`,`"--log-level=DEBUG"` |
 | `--ignore_comment` | You can change the comment that disables checking a given function or method. By default `#no-check` excludes the item from being checked. See below for more info. | `no-check` | `"--ignore_comment='hint-no-check'"` | 
 
 ## Use cases 
