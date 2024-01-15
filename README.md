@@ -96,10 +96,21 @@ You can disable checking functions that are named in a certain way. To disable c
 ```yaml
 args: ["--exclude_by_name='^test_" ]
 ```
+Then, for example this signature won't throw a warning:
+```python
+def test_filepath_in_log(caplog):
+    ...
+```
 ### By a parameter name
 You can disable checking parameters with a given name, e.g. the `self` parameter
 ```yaml
 args: [ --exclude_parameters=^self$ ]
+```
+For example this method signature won't throw any warnings:
+```python
+class FileMaker:
+    def read_file(self) -> str:
+        ...
 ```
 ### With a comment
 In special cases, you can just put `#no-check` comment next to the function, and the function will be ommited by this pre-commit hook.
