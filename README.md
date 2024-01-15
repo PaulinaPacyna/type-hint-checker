@@ -29,6 +29,7 @@ Checks that the parameters in functions and methods are annotated. _Annotation c
    ```
    pre-commit install
    ```
+4. Commit a file
 
 ### Run annotation checker from terminal
 0. If you already have it installed in pre-commit hooks:
@@ -38,9 +39,38 @@ Checks that the parameters in functions and methods are annotated. _Annotation c
 1. Try the cli version out by running
    ```shell
    pip install annotation_checker
+   ```
+2. Run the tool using
+   ```shell
    annotation_checker <path to file>
    ```
-#### Tests
+   or
+   ```shell
+   python -m annotation_checker <path to file>
+   ```
+ 
+## Arguments
+It is understandable that there are different conding standards. You can customize the behavior of this pre-commit hook by adding the following options to your `.pre-commit-config.yaml`.
+
+
+| Argument | Usage | Default value | Example values |
+| - | - | - | - |
+| `--exit_zero` | If this flag is checked, the program always exits with 0 (success) code. It is strongly advised to use this flag together with `verbose: true` option in pre-commit options. | Not checked by default. | Either add `"--exit_zero"` to the `args` or don't. |
+| `--exclude_files` | Regex specifying which files should not be checked. | Empty (all files are checked) | `"--exclude_files=^test_"` |
+
+
+## Use cases 
+## Disable warnings
+### For a certain path
+### By a function name
+### By a parameter name
+### With a comment
+### In case of fire
+You can always commit without any pre-commit checks using 
+```shell script
+git commit --no-verify
+```
+## Tests
 To run the tests, run 
 ```shell script
 python -m pytest tests/
