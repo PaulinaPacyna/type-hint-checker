@@ -82,7 +82,6 @@ DEBUG:annotation_checker:{'filenames': ['test.py'], 'exit_zero': False, 'exclude
 _comment': 'no-check'}
 
 ```
-## Use cases 
 ## Disable warnings
 If you find the tool too restrictive, you are welcome to adjust it behavior. You can choose to ignore whole files, functions, parameters or single lines
 ### For a certain path
