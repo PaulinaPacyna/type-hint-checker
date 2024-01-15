@@ -88,13 +88,13 @@ If you find the tool too restrictive, you are welcome to adjust it behavior. You
 ### For a certain path
 If you don't want to check a certain file or folder, add the path to the `--exclude_files` argument. The argument must be a valid regex. To omit checking the directory `tests/` and the file `setup.py` use the following regex in your `.pre-commit-config`:
 ```yaml
-args: ["--exclude_files=(tests/|setup.py)" ]
+args: ["--exclude_files='(tests/|setup.py)'" ]
 ```
 
 ### By a function name
 You can disable checking functions that are named in a certain way. To disable checking all functions that begin with `test_` prefix, use:
 ```yaml
-args: ["--exclude_files=(tests/|setup.py)" ]
+args: ["--exclude_by_name='^test_" ]
 ```
 ### By a parameter name
 You can disable checking parameters with a given name, e.g. the `self` parameter
