@@ -9,9 +9,10 @@ repos:
         name: annotation_checker
         entry: annotation_checker
         language: python
-        files: '.py'
-        args: [--log-level=DEBUG,
-               --exclude_files=tests,
-               --exclude_parameters=^self$
+        files: '.py$'
+        args: [
+          #--exit_zero, # always exit with 0 code
+          #--exclude_files=tests, #exclude all paths that have the string tests inside
+          #--exclude_parameters=^self$, #don't throw warnings about self parameter
         ]
         verbose: true

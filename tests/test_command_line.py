@@ -132,12 +132,12 @@ def test_debug_level():
     assert "INFO:annotation_checker" in process.stderr
 
 
-def test_exclusion_comment():
+def test_ignore_comment():
     process = subprocess.run(
         [
             "annotation_checker",
             DIFFERENT_COMMENT,
-            "--exclusion_comment=custom",
+            "--ignore_comment=custom",
         ],
         capture_output=True,
         universal_newlines=True,

@@ -14,7 +14,7 @@ class FileParser:  # pylint: disable=too-few-public-methods
         filename : str - path to the file
         excluded_names : str - regex specifying which functions and classes should be
                                 omitted
-        exclusion_comment : str - if this phrase appears in the comment, the item is
+        ignore_comment : str - if this phrase appears in the comment, the item is
                                 excluded
     """
 
@@ -22,9 +22,9 @@ class FileParser:  # pylint: disable=too-few-public-methods
         self,
         filename: str,
         excluded_names: str = "",
-        exclusion_comment: str = "no-check",
+        ignore_comment: str = "no-check",
     ) -> None:
-        self.__exclusion_comment = exclusion_comment
+        self.__ignore_comment = ignore_comment
         self.__excluded_names = excluded_names
         self.__filename = filename
         self.__body = self.__get_body()
@@ -86,7 +86,7 @@ class FileParser:  # pylint: disable=too-few-public-methods
             tokenized = tokenize(file.readline)
             for item in tokenized:
                 if item.exact_type == COMMENT:
-                    if self.__exclusion_comment in item.line:
+                    if self.__ignore_comment in item.line:
                         result.append(item.start[0])
         return result
 

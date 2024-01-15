@@ -60,17 +60,17 @@ def test_check_annotated(input_path: str, result: bool) -> None:
 
 
 @pytest.mark.parametrize(
-    "input_path,exclusion_comment,result",
+    "input_path,ignore_comment,result",
     [
         (COMMENT_BODY, "jdncajbc", False),
         (COMMENT_BODY, "custom", False),
         (DIFFERENT_COMMENT, "custom", True),
     ],
 )
-def test_custom_exclusion_comment(
-    input_path: str, exclusion_comment: str, result: bool
+def test_custom_ignore_comment(
+    input_path: str, ignore_comment: str, result: bool
 ) -> None:
-    assert check_annotated([input_path], exclusion_comment=exclusion_comment) == result
+    assert check_annotated([input_path], ignore_comment=ignore_comment) == result
 
 
 def test_incorrect_file(incorrect_file, tmp_path: pathlib.Path) -> None:
