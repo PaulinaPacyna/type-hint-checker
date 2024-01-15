@@ -89,14 +89,14 @@ DEBUG:annotation_checker:{'filenames': ['test.py'],
 
 ```
 ## Disable warnings
-If you find the tool too restrictive, you are welcome to adjust it behavior. You can choose to ignore whole files, functions, parameters or single lines
-### For a certain path
+If you find annotation_checker too restrictive, you are welcome to adjust its behavior. You can choose to ignore whole files, functions, parameters or single lines
+### Ignore a path
 If you don't want to check a certain file or folder, add the path to the `--exclude_files` argument. The argument must be a valid regex. To omit checking the directory `tests/` and the file `setup.py` use the following regex in your `.pre-commit-config`:
 ```yaml
 args: ["--exclude_files='(tests/|setup.py)'" ]
 ```
 
-### By a function name
+### Ignore a function by name
 You can disable checking functions that are named in a certain way. To disable checking all functions that begin with `test_` prefix, use:
 ```yaml
 args: ["--exclude_by_name='^test_" ]
@@ -106,7 +106,7 @@ Then, for example this signature won't throw a warning:
 def test_filepath_in_log(caplog):
     ...
 ```
-### By a parameter name
+### Ignore a parameter by name
 You can disable checking parameters with a given name, e.g. the `self` parameter
 ```yaml
 args: [ --exclude_parameters=^self$ ]
