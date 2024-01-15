@@ -30,7 +30,21 @@ Checks that the parameters in functions and methods are annotated. _Annotation c
    pre-commit install
    ```
 4. Commit a file
-
+    ```shell
+     echo  'def f1(a): pass' > test.py
+     git commit test.py -m "Test annotation_checker pre-commit hook"
+    ```
+   The output should be similar to this:
+   ```
+    annotation_checker.......................................................Failed
+    - hook id: annotation_checker
+    - duration: 0.33s
+    - exit code: 1
+    
+    INFO:annotation_checker:test.py: Missing annotation for parameter a (function f1), line 1
+    INFO:annotation_checker:test.py: Missing return annotation for function f1, line 1
+   ```
+   
 ### Run annotation checker from terminal
 0. If you already have it installed in pre-commit hooks:
    ```
@@ -60,7 +74,7 @@ It is understandable that there are different coding standards. You can customiz
 | `--exclude_parameters` | Regex specifying which parameters should not be checked. | `^self$` | `"--exclude_parameters=''"` (check all params) `"--exclude_parameters='(^self$|logger)'"` |
 | `--exclude_by_name` | Regex specifying names of functions, methods and classes that should not be checked | Empty (all functions, classes and methods are checked). | `"--exclude_by_name=^test_"` |
 | `--log-level` | If set to `DEBUG`, displays more logs. | `INFO` | `"--log-level=INFO"`,`"--log-level=DEBUG"` |
-| `--ignore_comment` | You can change the comment that disables checking a given function or method. By default `#no-check` excludes the item from being checked. See below for more info. | `no-check` | `"--ignore_comment='hint-no-check'"` | 
+| `--ignore_comment` | You can change the content of the comment that disables checking a given function or method. By default `#no-check` excludes the item from being checked. See below for more info. | `no-check` | `"--ignore_comment='hint-no-check'"` | 
 
 ## Use cases 
 ## Disable warnings
