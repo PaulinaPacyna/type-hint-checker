@@ -79,8 +79,13 @@ It is understandable that there are different coding standards. You can customiz
 
 If you have troubles setting those values, it may be due to how your system parses special characters in command line options. Add `--log-level=DEBUG` to you `.pre-commit-config.yaml`. The log message will show you what values are passed as command line arguments.
 ```
-DEBUG:annotation_checker:{'filenames': ['test.py'], 'exit_zero': False, 'exclude_files': 'tests/', 'exclude_parameters': '^self$', 'exclude_by_name': '', 'log_level': 'DEBUG', 'ignore
-_comment': 'no-check'}
+DEBUG:annotation_checker:{'filenames': ['test.py'],
+ 'exit_zero': False, 
+'exclude_files': 'tests/', 
+'exclude_parameters': '^self$', 
+'exclude_by_name': '', 
+'log_level': 'DEBUG', 
+'ignore_comment': 'no-check'}
 
 ```
 ## Disable warnings
