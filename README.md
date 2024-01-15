@@ -107,18 +107,18 @@ def test_filepath_in_log(caplog):
     ...
 ```
 ### Ignore a parameter by name
-You can disable checking parameters with a given name, e.g. the `self` parameter
+You can disable checking parameters with a regex, e.g. the `self` parameter
 ```yaml
 args: [ --exclude_parameters=^self$ ]
 ```
-For example this method signature won't throw any warnings:
+With the option shown above, this method signature won't throw any warnings:
 ```python
 class FileMaker:
     def read_file(self) -> str:
         ...
 ```
 ### With a comment
-In special cases, you can just put `#no-check` comment next to the function, and the function will be ommited by this pre-commit hook.
+In special cases, you can just put `#no-check` comment next to the function, and the function will be omitted by this pre-commit hook.
 ```python 
 def func(a: int, b: int, n): #no-check
     pass
