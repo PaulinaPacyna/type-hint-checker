@@ -9,7 +9,7 @@ repos:
         name: annotation_checker
         entry: annotation_checker
         language: python
-        files: '.py'
+        files: '.py$'
         args: [--log-level=DEBUG,
                --exclude_files=tests,
                --exclude_parameters=^self$
