@@ -76,7 +76,7 @@ It is understandable that there are different coding standards. You can customiz
 | `--log-level` | If set to `DEBUG`, displays more logs. | `INFO` | `"--log-level=INFO"`,`"--log-level=DEBUG"` |
 | `--ignore_comment` | You can change the content of the comment that disables checking a given function or method. By default `#no-check` excludes the item from being checked. See below for more info. | `no-check` | `"--ignore_comment='hint-no-check'"` | 
 
-If you have troubles setting those values, it may be due to how your system parses special character in command line options. Add `--log-level=DEBUG` to you `.pre-commit-config.yaml`. The log message will show you what values are passes as command line arguments.
+If you have troubles setting those values, it may be due to how your system parses special characters in command line options. Add `--log-level=DEBUG` to you `.pre-commit-config.yaml`. The log message will show you what values are passes as command line arguments.
 ```
 DEBUG:annotation_checker:{'filenames': ['test.py'], 'exit_zero': False, 'exclude_files': 'tests/', 'exclude_parameters': '^self$', 'exclude_by_name': '', 'log_level': 'DEBUG', 'ignore
 _comment': 'no-check'}
