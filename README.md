@@ -20,10 +20,11 @@ Checks that the parameters in functions and methods are annotated. _Annotation c
          language: python
          verbose: true
          files: ".py$"
-         args: [#--exit_zero, # always exit with 0 code
-                #--exclude_files=tests, #exclude all paths that have the string tests inside
-                #--exclude_parameters=^self$, #don't throw warnings about self parameter
-         ]
+         args: [
+           #--exit_zero, # always exit with 0 code
+           #--exclude_files=tests, #exclude all paths that have the string tests inside
+           #--exclude_parameters=^self$, #don't throw warnings about self parameter
+        ]
    ```
 3. Install the pre-commit hook
    ```
