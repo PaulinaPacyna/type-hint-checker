@@ -125,6 +125,8 @@ You can always commit without any pre-commit checks using
 ```shell script
 git commit --no-verify
 ```
+## Pep8 specification about type hints
+The default formatting options were set in accordance to [PEP8 484](https://peps.python.org/pep-0484/)
 ## Tests
 To run the tests, run 
 ```shell script
