@@ -24,12 +24,12 @@ type_hint_checker.......................................................Failed
 2. Create a `.pre-commit-config.yaml` or use your existing config file. Add the following lines:
    ```yaml
    repos:
-   -   repo: https://github.com/PaulinaPacyna/annotation-checker
+   -   repo: https://github.com/PaulinaPacyna/type-hint-checker
        rev: latest
        hooks:
        - id: type_hint_checker
          name: type_hint_checker
-         description: Check that all python functions are annotated
+         description: Check that all python functions have type hints
          entry: type_hint_checker
          language: python
          verbose: true
@@ -56,8 +56,8 @@ type_hint_checker.......................................................Failed
     - duration: 0.33s
     - exit code: 1
     
-    INFO:type_hint_checker:test.py: Missing annotation for parameter a (function f1), line 1
-    INFO:type_hint_checker:test.py: Missing return annotation for function f1, line 1
+    INFO:type_hint_checker:test.py: Missing type hint for parameter a (function f1), line 1
+    INFO:type_hint_checker:test.py: Missing return type hint for function f1, line 1
    ```
    
 ### Run type hint checker from terminal

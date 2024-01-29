@@ -38,7 +38,7 @@ class Checker(ABC):
 
     def log_results(self, logger: Logger, filename: Optional[str] = None) -> None:
         """
-        Displays a log message for each incorrectly annotated function or method.
+        Displays a log message for each function or method with type hints.
         Parameters
         ----------
             logger (Logger): logger object that displays the message.
