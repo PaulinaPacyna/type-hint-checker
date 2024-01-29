@@ -1,9 +1,6 @@
 repos:
-  - repo: https://github.com/psf/black
-    rev: 23.9.1
-    hooks:
-    - id: black
-  - repo: local
+  - repo: https://github.com/PaulinaPacyna/type-hint-checker
+    rev: main
     hooks:
       - id: type_hint_checker
         name: type_hint_checker
@@ -11,8 +8,12 @@ repos:
         language: python
         files: '.py$'
         args: [
-          #--exit_zero, # always exit with 0 code
+          # --exit_zero, # always exit with 0 code
           --exclude_files=tests, #exclude all paths that have the string tests inside
-#          --exclude_parameters=^self$, #don't throw warnings about self parameter
+          # --exclude_parameters=^self$, #don't throw warnings about self parameter
         ]
         verbose: true
+  - repo: https://github.com/psf/black
+    rev: 23.9.1
+    hooks:
+     - id: black
