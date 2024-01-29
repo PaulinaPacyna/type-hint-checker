@@ -3,9 +3,8 @@ name: Test command line app installed from local
 on:
   workflow_dispatch:
   push:
-    branches_ignore:
+    branches-ignore:
       - "main"
-      - "release/*"
 permissions:
   contents: read
 
