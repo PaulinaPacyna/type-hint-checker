@@ -11,8 +11,10 @@ permissions:
 
 jobs:
   get_release_version:
-    run: |
-      echo "VERSION=$(cat VERSION)" >> $GITHUB_ENV
+    steps:
+    - name: Get release version
+      run: |
+        echo "VERSION=$(cat VERSION)" >> $GITHUB_ENV
   publish_to_pypi:
     runs-on: ubuntu-latest
 
