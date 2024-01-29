@@ -63,7 +63,7 @@ jobs:
         run: |
           python -m pytest tests/test_pre_commit.py
 
-  install_from_pypi:
+  test_command_line:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -88,7 +88,7 @@ jobs:
         run: |
           python -m pytest tests/test_command_line.py
 
-  test_from_local:
+  test_from_test_pypi:
 
     runs-on: ubuntu-latest
     strategy:
