@@ -13,10 +13,10 @@ jobs:
   get_release_version:
     runs-on: ubuntu-latest
     steps:
-    - name: Get release version
-      uses: actions/setup-python@v3
+    - uses: actions/setup-python@v3
       with:
         python-version: '3.10'
+    - name: Get release version
       run: |
         echo "VERSION=$(python setup.py --version)" >> $GITHUB_ENV
   publish_to_pypi:
