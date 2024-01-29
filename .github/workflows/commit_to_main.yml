@@ -1,7 +1,8 @@
 name: On pull request to main
 
 on:
-  pull_request:
+  workflow_dispatch:
+  push:
     branches:
       - "main"
 
@@ -12,7 +13,7 @@ jobs:
   get_release_version:
     run: |
       echo "VERSION=$(cat VERSION)" >> $GITHUB_ENV
-  publish_to_test_pypi:
+  publish_to_pypi:
     runs-on: ubuntu-latest
 
     steps:
@@ -31,8 +32,20 @@ jobs:
       uses: pypa/gh-action-pypi-publish@27b31702a0e7fc50959f5ad993c78deac1bdfc29
       with:
         user: __token__
-        password: ${{ secrets.TEST_PYPI_API_TOKEN }}
-        repository-url: https://test.pypi.org/legacy/
+        password: ${{ secrets.PYPI_API_TOKEN }}
+  create_github_release:
+    name: "Create github release"
+    runs-on: "ubuntu-latest"
+    steps:
+    - uses: "marvinpinto/action-automatic-releases@latest"
+      with:
+        repo_token: "${{ secrets.GITHUB_TOKEN }}"
+        automatic_release_tag: "v${{ env.VERSION }"
+        prerelease: false
+        title: "v${{ env.VERSION }"
+        files: |
+          LICENSE.txt
+          build/*.whl
   test_pre_commit_from_tag:
     runs-on: ubuntu-latest
     strategy:
@@ -54,8 +67,6 @@ jobs:
           rm .pre-commit-config-local.yaml .pre-commit-hooks.yaml .pylintrc README.md setup.cfg setup.py
           python -m pip install --upgrade pip
           pip install pre-commit pytest
-          sed "3s/main/release\\/{{ env.VERSION }}/" .pre-commit-config.yaml > tmp
-          mv tmp .pre-commit-config.yaml
           pre-commit install
           pre-commit run --all-files || true #  For pre-commit initialization
       - name: Test with pytest
@@ -82,7 +93,7 @@ jobs:
           rm .pre-commit-config.yaml .pre-commit-hooks.yaml .pylintrc README.md setup.cfg setup.py
           python -m pip install --upgrade pip
           pip install pytest
-          pip install -i https://test.pypi.org/simple/ type-hint-checker=={{ env.VERSION }}
+          pip install type-hint-checker=={{ env.VERSION }}
       - name: Test with pytest
         run: |
           python -m pytest tests/test_command_line.py
@@ -110,7 +121,7 @@ jobs:
         rm .pre-commit-config.yaml .pre-commit-hooks.yaml .pylintrc README.md setup.cfg setup.py
         python -m pip install --upgrade pip
         pip install pytest
-        pip install -i https://test.pypi.org/simple/ type-hint-checker=={{ env.VERSION }}
+        pip install type-hint-checker=={{ env.VERSION }}
     - name: Test with pytest
       run: |
           pytest tests/test_unit_tests.py

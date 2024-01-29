@@ -1,6 +1,6 @@
 repos:
   - repo: https://github.com/PaulinaPacyna/type-hint-checker
-    rev: latest
+    rev: main
     hooks:
       - id: type_hint_checker
         name: type_hint_checker
