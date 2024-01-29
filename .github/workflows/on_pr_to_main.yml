@@ -59,7 +59,7 @@ jobs:
           rm .pre-commit-config-local.yaml .pre-commit-hooks.yaml .pylintrc README.md setup.cfg setup.py
           python -m pip install --upgrade pip
           pip install pre-commit pytest
-          sed "3s/main/release\\/{{ env.VERSION }}/" .pre-commit-config.yaml > tmp
+          sed "3s/main/release\\/${{ env.VERSION }}/" .pre-commit-config.yaml > tmp
           mv tmp .pre-commit-config.yaml
           pre-commit install
           pre-commit run --all-files || true #  For pre-commit initialization
@@ -87,7 +87,7 @@ jobs:
           rm .pre-commit-config.yaml .pre-commit-hooks.yaml .pylintrc README.md setup.cfg setup.py
           python -m pip install --upgrade pip
           pip install pytest
-          pip install -i https://test.pypi.org/simple/ type-hint-checker=={{ env.VERSION }}
+          pip install -i https://test.pypi.org/simple/ type-hint-checker==${{ env.VERSION }}
       - name: Test with pytest
         run: |
           python -m pytest tests/test_command_line.py
@@ -115,7 +115,7 @@ jobs:
         rm .pre-commit-config.yaml .pre-commit-hooks.yaml .pylintrc README.md setup.cfg setup.py
         python -m pip install --upgrade pip
         pip install pytest
-        pip install -i https://test.pypi.org/simple/ type-hint-checker=={{ env.VERSION }}
+        pip install -i https://test.pypi.org/simple/ type-hint-checker==${{ env.VERSION }}
     - name: Test with pytest
       run: |
           pytest tests/test_unit_tests.py

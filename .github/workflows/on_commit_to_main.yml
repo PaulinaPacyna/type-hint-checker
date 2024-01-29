@@ -99,7 +99,7 @@ jobs:
           rm .pre-commit-config.yaml .pre-commit-hooks.yaml .pylintrc README.md setup.cfg setup.py
           python -m pip install --upgrade pip
           pip install pytest
-          pip install type-hint-checker=={{ env.VERSION }}
+          pip install type-hint-checker==${{ env.VERSION }}
       - name: Test with pytest
         run: |
           python -m pytest tests/test_command_line.py
@@ -127,7 +127,7 @@ jobs:
         rm .pre-commit-config.yaml .pre-commit-hooks.yaml .pylintrc README.md setup.cfg setup.py
         python -m pip install --upgrade pip
         pip install pytest
-        pip install type-hint-checker=={{ env.VERSION }}
+        pip install type-hint-checker==${{ env.VERSION }}
     - name: Test with pytest
       run: |
           pytest tests/test_unit_tests.py
