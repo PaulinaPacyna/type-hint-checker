@@ -18,7 +18,7 @@ def check_type_hints(
     ignore_comment: str = "no-check",
 ) -> bool:
     """
-    Iterates through the list of file paths, parses the files and checks if all
+    Iterates through the list of file paths, parses the files and checks if
     functions and classes in the files have type hints.
     Parameters
     ----------

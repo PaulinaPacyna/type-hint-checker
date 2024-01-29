@@ -21,7 +21,7 @@ type_hint_checker.......................................................Failed
    pip install pre-commit
    ```
 
-2. Create a `.pre-commit-hooks.yaml` or use your existing config file. Add the following lines:
+2. Create a `.pre-commit-config.yaml` or use your existing config file. Add the following lines:
    ```yaml
    repos:
    -   repo: https://github.com/PaulinaPacyna/annotation-checker
