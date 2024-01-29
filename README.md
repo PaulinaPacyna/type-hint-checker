@@ -1,6 +1,20 @@
-# Annotation checker 
-Checks that the parameters in functions and methods are annotated. _Annotation checker_ is intended to be used as a [pre-commit](https://pre-commit.com/) hook.
+# Type hint checker 
+Checks that the parameters in functions and methods have type hint. _Type hint checker_ is intended to be used as a [pre-commit](https://pre-commit.com/) hook.
 
+```python
+def f1(a):
+    pass
+```
+```shell script
+> git commit 
+type_hint_checker.......................................................Failed
+    - hook id: type_hint_checker
+    - duration: 0.33s
+    - exit code: 1
+    
+    INFO:type_hint_checker:test.py: Missing type hint for parameter a (function f1), line 1
+    INFO:type_hint_checker:test.py: Missing return type hint for function f1, line 1
+```
 ## Quick start
 1. Install pre-commit hooks [https://pre-commit.com/#install](https://pre-commit.com/#install)
    ```shell
@@ -13,10 +27,10 @@ Checks that the parameters in functions and methods are annotated. _Annotation c
    -   repo: https://github.com/PaulinaPacyna/annotation-checker
        rev: latest
        hooks:
-       - id: annotation_checker
-         name: annotation_checker
+       - id: type_hint_checker
+         name: type_hint_checker
          description: Check that all python functions are annotated
-         entry: annotation_checker
+         entry: type_hint_checker
          language: python
          verbose: true
          files: ".py$"
@@ -33,35 +47,35 @@ Checks that the parameters in functions and methods are annotated. _Annotation c
 4. Commit a file
     ```shell
      echo  'def f1(a): pass' > test.py
-     git commit test.py -m "Test annotation_checker pre-commit hook"
+     git commit test.py -m "Test type_hint_checker pre-commit hook"
     ```
    The output should be similar to this:
    ```
-    annotation_checker.......................................................Failed
-    - hook id: annotation_checker
+    type_hint_checker.......................................................Failed
+    - hook id: type_hint_checker
     - duration: 0.33s
     - exit code: 1
     
-    INFO:annotation_checker:test.py: Missing annotation for parameter a (function f1), line 1
-    INFO:annotation_checker:test.py: Missing return annotation for function f1, line 1
+    INFO:type_hint_checker:test.py: Missing annotation for parameter a (function f1), line 1
+    INFO:type_hint_checker:test.py: Missing return annotation for function f1, line 1
    ```
    
-### Run annotation checker from terminal
+### Run type hint checker from terminal
 0. If you already have it installed in pre-commit hooks:
    ```
-   pre-commit run annotation_checker --all-files
+   pre-commit run type_hint_checker --all-files
    ```
 1. Try the cli version out by running
    ```shell
-   pip install annotation_checker
+   pip install type_hint_checker
    ```
 2. Run the tool using
    ```shell
-   annotation_checker <path to file>
+   type_hint_checker <path to file>
    ```
    or
    ```shell
-   python -m annotation_checker <path to file>
+   python -m type_hint_checker <path to file>
    ```
  
 ## Arguments
@@ -79,7 +93,7 @@ It is understandable that there are different coding standards. You can customiz
 
 If you have troubles setting those values, it may be due to how your system parses special characters in command line options. Add `--log-level=DEBUG` to you `.pre-commit-config.yaml`. The log message will show you what values are passed as command line arguments.
 ```
-DEBUG:annotation_checker:{'filenames': ['test.py'],
+DEBUG:type_hint_checker:{'filenames': ['test.py'],
  'exit_zero': False, 
 'exclude_files': 'tests/', 
 'exclude_parameters': '^self$', 
@@ -89,7 +103,7 @@ DEBUG:annotation_checker:{'filenames': ['test.py'],
 
 ```
 ## Disable warnings
-If you find annotation_checker too restrictive, you are welcome to adjust its behavior. You can choose to ignore whole files, functions, parameters or single lines
+If you find type_hint_checker too restrictive, you are welcome to adjust its behavior. You can choose to ignore whole files, functions, parameters or single lines
 ### Ignore a path
 If you don't want to check a certain file or folder, add the path to the `--exclude_files` argument. The argument must be a valid regex. To omit checking the directory `tests/` and the file `setup.py` use the following regex in your `.pre-commit-config`:
 ```yaml

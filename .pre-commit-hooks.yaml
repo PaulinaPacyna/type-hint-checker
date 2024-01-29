@@ -1,7 +1,7 @@
-- id: annotation_checker
-  name: annotation_checker
-  description: Check that all python files are annotated
-  entry: annotation_checker
+- id: type_hint_checker
+  name: type_hint_checker
+  description: Check that all python files have type hints
+  entry: type_hint_checker
   language: python
   files: ".py$"
   args: []

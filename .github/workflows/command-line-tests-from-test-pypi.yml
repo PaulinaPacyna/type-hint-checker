@@ -20,11 +20,11 @@ jobs:
         python-version: "3.8"
     - name: Install dependencies
       run: |
-        rm -r annotation_checker
+        rm -r type_hint_checker
         rm .pre-commit-config.yaml .pre-commit-hooks.yaml .pylintrc README.md setup.cfg setup.py
         python -m pip install --upgrade pip
         pip install pytest
-        pip install -i https://test.pypi.org/simple/ annotation-checker
+        pip install -i https://test.pypi.org/simple/ type-hint-checker
         ls
     - name: Test with pytest
       run: |

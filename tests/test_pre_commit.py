@@ -4,43 +4,43 @@ from typing import Set
 
 RUN_ALL_OUTPUT = {
     "",
-    "INFO:annotation_checker:tests/cases/mixed_parameters.py: Missing annotation for "
+    "INFO:type_hint_checker:tests/cases/mixed_parameters.py: Missing type hint for "
     "parameter a "
     "(function f1), line 1",
-    "INFO:annotation_checker:tests/cases/mixed_parameters.py: Missing return annotation "
+    "INFO:type_hint_checker:tests/cases/mixed_parameters.py: Missing return type hint "
     "for function f1, line 1",
-    "INFO:annotation_checker:tests/cases/no_return.py: Missing return annotation "
+    "INFO:type_hint_checker:tests/cases/no_return.py: Missing return type hint "
     "for "
     "function f1, line 1",
-    "INFO:annotation_checker:tests/cases/mixed_parameters_with_return.py: Missing "
-    "annotation for "
+    "INFO:type_hint_checker:tests/cases/mixed_parameters_with_return.py: Missing "
+    "type hint for "
     "parameter test_aa (function f5), line 1",
-    "INFO:annotation_checker:tests/cases/comment_above.py: Missing annotation for "
+    "INFO:type_hint_checker:tests/cases/comment_above.py: Missing type hint for "
     "parameter a (function f1), line 5",
-    "INFO:annotation_checker:tests/cases/comment_above.py: Missing annotation for "
+    "INFO:type_hint_checker:tests/cases/comment_above.py: Missing type hint for "
     "parameter b (function f1), line 5",
-    "INFO:annotation_checker:tests/cases/comment_above.py: Missing return "
-    "annotation for function f1, line 5",
-    "INFO:annotation_checker:tests/cases/comment_below.py: Missing annotation for "
+    "INFO:type_hint_checker:tests/cases/comment_above.py: Missing return "
+    "type hint for function f1, line 5",
+    "INFO:type_hint_checker:tests/cases/comment_below.py: Missing type hint for "
     "parameter a (function f1), line 4",
-    "INFO:annotation_checker:tests/cases/comment_below.py: Missing annotation for "
+    "INFO:type_hint_checker:tests/cases/comment_below.py: Missing type hint for "
     "parameter b (function f1), line 4",
-    "INFO:annotation_checker:tests/cases/comment_below.py: Missing return "
-    "annotation for function f1, line 4",
-    "INFO:annotation_checker:tests/cases/different_comment.py: Missing annotation "
+    "INFO:type_hint_checker:tests/cases/comment_below.py: Missing return "
+    "type hint for function f1, line 4",
+    "INFO:type_hint_checker:tests/cases/different_comment.py: Missing type hint "
     "for parameter a (function f1), line 4",
-    "INFO:annotation_checker:tests/cases/different_comment.py: Missing annotation "
+    "INFO:type_hint_checker:tests/cases/different_comment.py: Missing type hint "
     "for parameter b (function f1), line 4",
-    "INFO:annotation_checker:tests/cases/different_comment.py: Missing return "
-    "annotation for function f1, line 4",
-    "INFO:annotation_checker:tests/cases/mixed_parameters_class.py: Missing annotation "
+    "INFO:type_hint_checker:tests/cases/different_comment.py: Missing return "
+    "type hint for function f1, line 4",
+    "INFO:type_hint_checker:tests/cases/mixed_parameters_class.py: Missing type hint "
     "for parameter a (function f1), line 4",
-    "INFO:annotation_checker:tests/cases/mixed_parameters_class.py: Missing return "
-    "annotation for function f1, line 4",
-    "INFO:annotation_checker:tests/cases/no_return_class.py: Missing return "
-    "annotation for function f1, line 4",
-    "INFO:annotation_checker:tests/cases/static_function_class.py: Missing "
-    "annotation for parameter a (function f1), line 5",
+    "INFO:type_hint_checker:tests/cases/mixed_parameters_class.py: Missing return "
+    "type hint for function f1, line 4",
+    "INFO:type_hint_checker:tests/cases/no_return_class.py: Missing return "
+    "type hint for function f1, line 4",
+    "INFO:type_hint_checker:tests/cases/static_function_class.py: Missing "
+    "type hint for parameter a (function f1), line 5",
 }
 
 
@@ -54,15 +54,15 @@ def run_command(command: str) -> subprocess.CompletedProcess:
 def test_run_all() -> None:
     """Basic check"""
     process = run_command(
-        "pre-commit run annotation_checker --all-files -c tests/configs/strict.yaml"
+        "pre-commit run type_hint_checker --all-files -c tests/configs/strict.yaml"
     )
     output = process.stdout
     lines = prepare_output(output)
     assert lines == {
         *RUN_ALL_OUTPUT,
-        "annotation_checker......................................................."
+        "type_hint_checker......................................................."
         "Failed",
-        "- hook id: annotation_checker",
+        "- hook id: type_hint_checker",
         "- exit code: 1",
     }
     assert process.returncode == 1
@@ -71,15 +71,15 @@ def test_run_all() -> None:
 def test_run_all_not_strict() -> None:
     """Test if pre-commit doesn't fail when strict=False"""
     process = run_command(
-        "pre-commit run annotation_checker --all-files -c tests/configs/not-strict.yaml"
+        "pre-commit run type_hint_checker --all-files -c tests/configs/not-strict.yaml"
     )
     output = process.stdout
     lines = prepare_output(output)
     assert lines == {
         *RUN_ALL_OUTPUT,
-        "annotation_checker......................................................."
+        "type_hint_checker......................................................."
         "Passed",
-        "- hook id: annotation_checker",
+        "- hook id: type_hint_checker",
     }
     assert process.returncode == 0
 
