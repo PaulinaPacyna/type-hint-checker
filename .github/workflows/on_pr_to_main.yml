@@ -10,6 +10,7 @@ permissions:
 
 jobs:
   get_release_version:
+    runs-on: ubuntu-latest
     steps:
       - name: Get release version
         run: |
