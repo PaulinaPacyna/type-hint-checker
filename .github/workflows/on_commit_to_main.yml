@@ -47,7 +47,8 @@ jobs:
           release_name: Release v${{ env.VERSION }}
           draft: false
           prerelease: false
-  test_pre_commit_from_tag:
+          generate_release_notes: true
+  test_pre_commit_from_main:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -74,7 +75,7 @@ jobs:
         run: |
           python -m pytest tests/test_pre_commit.py
 
-  install_from_pypi:
+  test_command_line:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -99,7 +100,7 @@ jobs:
         run: |
           python -m pytest tests/test_command_line.py
 
-  test_from_local:
+  test_from_pypi:
 
     runs-on: ubuntu-latest
     strategy:
