@@ -33,6 +33,48 @@ jobs:
         user: __token__
         password: ${{ secrets.PYPI_API_TOKEN }}
         repository-url: https://test.pypi.org/legacy/
+  create_github_release:
+    name: "Create github release"
+    runs-on: "ubuntu-latest"
+    steps:
+    - uses: "marvinpinto/action-automatic-releases@latest"
+      with:
+        repo_token: "${{ secrets.GITHUB_TOKEN }}"
+        automatic_release_tag: "v${{ env.VERSION }"
+        prerelease: false
+        title: "v${{ env.VERSION }"
+        files: |
+          LICENSE.txt
+          build/*.whl
+  test_pre_commit_from_tag:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: [ "3.8", "3.9", "3.10", "3.11" ]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v3
+        with:
+          python-version: "${{ matrix.python-version }}"
+      - name: Install dependencies
+        run: |
+          set -e
+          rm -r type_hint_checker
+          rm .pre-commit-config-local.yaml .pre-commit-hooks.yaml .pylintrc README.md setup.cfg setup.py
+          python -m pip install --upgrade pip
+          pip install pre-commit pytest
+          sed "3s/latest/aaa/" .pre-commit-config.yaml -> tmp
+          mv tmp .pre-commit-config.yaml
+          pre-commit install
+          pre-commit run --all-files || true #  For pre-commit initialization
+      - name: Test with pytest
+        run: |
+          python -m pytest tests/test_pre_commit.py
+
   install_from_pypi:
     runs-on: ubuntu-latest
     strategy:
