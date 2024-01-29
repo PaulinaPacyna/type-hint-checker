@@ -3,7 +3,7 @@ name: Install precommit and test feature
 on:
   workflow_dispatch:
   push:
-    branches_ignore:
+    branches-ignore:
       - "main"
       - "release/*"
 
