@@ -1,5 +1,5 @@
 # Type hint checker 
-Checks that the parameters in functions and methods have type hint. _Type hint checker_ is intended to be used as a [pre-commit](https://pre-commit.com/) hook.
+Checks that the parameters in functions and methods have type hints. _Type hint checker_ is intended to be used as a [pre-commit](https://pre-commit.com/) hook.
 
 ```python
 def f1(a):
