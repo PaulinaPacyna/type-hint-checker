@@ -9,7 +9,7 @@ permissions:
   contents: read
 
 jobs:
-  build:
+  test_from_local:
 
     runs-on: ubuntu-latest
 
