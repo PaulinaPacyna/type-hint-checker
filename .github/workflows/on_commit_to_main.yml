@@ -38,15 +38,15 @@ jobs:
     runs-on: "ubuntu-latest"
     steps:
       - name: Create Release
-          id: create_release
-          uses: actions/create-release@v1
-          env:
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          with:
-            tag_name: "v${{ env.VERSION }}"
-            release_name: Release v${{ env.VERSION }}
-            draft: false
-            prerelease: false
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: "v${{ env.VERSION }}"
+          release_name: Release v${{ env.VERSION }}
+          draft: false
+          prerelease: false
   test_pre_commit_from_tag:
     runs-on: ubuntu-latest
     strategy:
