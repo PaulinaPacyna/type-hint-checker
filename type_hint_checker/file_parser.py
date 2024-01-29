@@ -3,7 +3,7 @@ import re
 from tokenize import tokenize, COMMENT
 from typing import List
 
-from annotation_checker.exceptions import IncorrectFileException
+from type_hint_checker.exceptions import IncorrectFileException
 
 
 class FileParser:  # pylint: disable=too-few-public-methods

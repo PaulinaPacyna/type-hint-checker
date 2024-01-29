@@ -1,19 +1,18 @@
 import logging
-import os
 
 import pathlib
 import pytest
 from pytest import fixture, raises
 
-from annotation_checker.exceptions import IncorrectFileException
-from annotation_checker.main import check_annotated, filter_files
+from type_hint_checker.exceptions import IncorrectFileException
+from type_hint_checker.main import check_type_hints, filter_files
 
 
 NO_RETURN = "tests/cases/no_return.py"
 MIXED_ARGS = "tests/cases/mixed_parameters.py"
 NO_ARGS = "tests/cases/no_parameters.py"
 NOT_A_FUNCTION = "tests/cases/not_a_function.py"
-STRING_ANNOTATION = "tests/cases/string_annotation.py"
+STRING_TYPE_HINT = "tests/cases/string_type_hint.py"
 MIXED_ARGS_WITH_RETURN = "tests/cases/mixed_parameters_with_return.py"
 COMMENT_ABOVE = "tests/cases/comment_above.py"
 COMMENT_BELOW = "tests/cases/comment_below.py"
@@ -44,7 +43,7 @@ def incorrect_file() -> str:
         (NO_RETURN, False),
         (NO_ARGS, True),
         (NOT_A_FUNCTION, True),
-        (STRING_ANNOTATION, True),
+        (STRING_TYPE_HINT, True),
         (MIXED_ARGS_WITH_RETURN, False),
         (COMMENT_ABOVE, False),
         (COMMENT_BELOW, False),
@@ -55,8 +54,8 @@ def incorrect_file() -> str:
         (COMMENT_LONG_HEADER_2, True),
     ],
 )
-def test_check_annotated(input_path: str, result: bool) -> None:
-    assert check_annotated([input_path]) == result
+def test_check_type_hints(input_path: str, result: bool) -> None:
+    assert check_type_hints([input_path]) == result
 
 
 @pytest.mark.parametrize(
@@ -70,7 +69,7 @@ def test_check_annotated(input_path: str, result: bool) -> None:
 def test_custom_ignore_comment(
     input_path: str, ignore_comment: str, result: bool
 ) -> None:
-    assert check_annotated([input_path], ignore_comment=ignore_comment) == result
+    assert check_type_hints([input_path], ignore_comment=ignore_comment) == result
 
 
 def test_incorrect_file(incorrect_file, tmp_path: pathlib.Path) -> None:
@@ -78,7 +77,7 @@ def test_incorrect_file(incorrect_file, tmp_path: pathlib.Path) -> None:
     file = tmp_path / "file737ny73814781.py"
     file.write_text(incorrect_file, encoding="utf-8")
     with raises(IncorrectFileException) as exception:
-        check_annotated([file])
+        check_type_hints([file])
     assert "file737ny73814781.py" in str(exception)
 
 
@@ -101,7 +100,7 @@ def test_filter_files_no_exclude() -> None:
 def test_filepath_in_log(caplog) -> None:
     """Test if the path to th file appears in the log"""
     with caplog.at_level(logging.INFO):
-        check_annotated([NO_RETURN])
+        check_type_hints([NO_RETURN])
     assert NO_RETURN in caplog.text
 
 
@@ -115,7 +114,7 @@ def test_filepath_in_log(caplog) -> None:
 def test_exclude_parameters_by_regex(pattern, result):
     """Test if parameters are excluded"""
     assert (
-        check_annotated([MIXED_ARGS_WITH_RETURN], exclude_parameters=pattern) == result
+        check_type_hints([MIXED_ARGS_WITH_RETURN], exclude_parameters=pattern) == result
     )
 
 
@@ -135,13 +134,13 @@ def test_exclude_parameters_by_regex(pattern, result):
 )
 def test_exclude_by_name(input_file, pattern, result):
     """Test excluding functions and classes by name"""
-    assert check_annotated([input_file], exclude_by_name=pattern) == result
+    assert check_type_hints([input_file], exclude_by_name=pattern) == result
 
 
 def testing_multiple_files(caplog):
     file_list = [MIXED_ARGS, NO_RETURN, MIXED_ARGS_WITH_RETURN]
     with caplog.at_level(logging.INFO):
-        check_annotated(file_list)
+        check_type_hints(file_list)
         assert all(filename in caplog.text for filename in file_list)
 
 
@@ -156,11 +155,11 @@ def testing_multiple_files(caplog):
     ],
 )
 def test_in_a_class(input_path, result) -> None:
-    assert check_annotated([input_path]) == result
+    assert check_type_hints([input_path]) == result
 
 
 def test_exclude_self() -> None:
-    assert check_annotated([STATIC_FUNCTION_CLASS], exclude_parameters="") == False
-    assert check_annotated([PROPERLY_ANNOTATED_CLASS], exclude_parameters="") == False
-    assert check_annotated([PROPERLY_ANNOTATED_CLASS]) == True
-    assert check_annotated([ANNOTATED_SELF_CLASS], exclude_parameters="") == True
+    assert check_type_hints([STATIC_FUNCTION_CLASS], exclude_parameters="") == False
+    assert check_type_hints([PROPERLY_ANNOTATED_CLASS], exclude_parameters="") == False
+    assert check_type_hints([PROPERLY_ANNOTATED_CLASS]) == True
+    assert check_type_hints([ANNOTATED_SELF_CLASS], exclude_parameters="") == True

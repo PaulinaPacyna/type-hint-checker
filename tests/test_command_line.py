@@ -11,13 +11,13 @@ DIFFERENT_COMMENT = "tests/cases/different_comment.py"
 
 
 def test_running_cli_version() -> None:
-    subprocess.run(["annotation_checker", NO_RETURN])
+    subprocess.run(["type_hint_checker", NO_RETURN])
 
 
 def test_exclude_files() -> None:
     process = subprocess.run(
         [
-            "annotation_checker",
+            "type_hint_checker",
             r"--exclude_files=no_.*\.py",
             NO_ARGS,
             NO_RETURN,
@@ -41,7 +41,7 @@ def test_exclude_files() -> None:
 )
 def test_exit_code(filename: str, result: int) -> None:
     process = subprocess.run(
-        ["annotation_checker", filename],
+        ["type_hint_checker", filename],
         capture_output=True,
         universal_newlines=True,
     )
@@ -58,7 +58,7 @@ def test_exit_code(filename: str, result: int) -> None:
 )
 def test_exit_code_with_exit_zero(filename: str) -> None:
     process = subprocess.run(
-        ["annotation_checker", filename, "--exit_zero"],
+        ["type_hint_checker", filename, "--exit_zero"],
         capture_output=True,
         universal_newlines=True,
     )
@@ -67,7 +67,7 @@ def test_exit_code_with_exit_zero(filename: str) -> None:
 
 def test_logging_filepath() -> None:
     process = subprocess.run(
-        ["annotation_checker", NO_RETURN],
+        ["type_hint_checker", NO_RETURN],
         capture_output=True,
         universal_newlines=True,
     )
@@ -84,7 +84,7 @@ def test_logging_filepath() -> None:
 def test_exclude_parameters(pattern: str, result: int) -> None:
     process = subprocess.run(
         [
-            "annotation_checker",
+            "type_hint_checker",
             MIXED_ARGS_WITH_RETURN,
             f"--exclude_parameters={pattern}",
         ],
@@ -112,7 +112,7 @@ def test_exclude_by_name(input_: str, pattern: str, result: int) -> None:
     """Test excluding functions and classes by name"""
     process = subprocess.run(
         [
-            "annotation_checker",
+            "type_hint_checker",
             input_,
             f"--exclude_by_name={pattern}",
         ],
@@ -124,18 +124,18 @@ def test_exclude_by_name(input_: str, pattern: str, result: int) -> None:
 
 def test_debug_level():
     process = subprocess.run(
-        ["annotation_checker", NO_RETURN, "--log-level=DEBUG"],
+        ["type_hint_checker", NO_RETURN, "--log-level=DEBUG"],
         capture_output=True,
         universal_newlines=True,
     )
-    assert "DEBUG:annotation_checker" in process.stderr
-    assert "INFO:annotation_checker" in process.stderr
+    assert "DEBUG:type_hint_checker" in process.stderr
+    assert "INFO:type_hint_checker" in process.stderr
 
 
 def test_ignore_comment():
     process = subprocess.run(
         [
-            "annotation_checker",
+            "type_hint_checker",
             DIFFERENT_COMMENT,
             "--ignore_comment=custom",
         ],
@@ -145,7 +145,7 @@ def test_ignore_comment():
     assert process.returncode == 0
     process = subprocess.run(
         [
-            "annotation_checker",
+            "type_hint_checker",
             DIFFERENT_COMMENT,
         ],
         capture_output=True,

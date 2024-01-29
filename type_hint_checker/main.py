@@ -4,14 +4,14 @@ import sys
 from typing import List
 import logging
 
-from annotation_checker.checkers import FunctionChecker, ClassChecker
-from annotation_checker.file_parser import FileParser
+from type_hint_checker.checkers import FunctionChecker, ClassChecker
+from type_hint_checker.file_parser import FileParser
 
-logger = logging.getLogger("annotation_checker")
+logger = logging.getLogger("type_hint_checker")
 logging.basicConfig()
 
 
-def check_annotated(
+def check_type_hints(
     file_list: List[str],
     exclude_parameters: str = "^self$",
     exclude_by_name: str = "",
@@ -19,7 +19,7 @@ def check_annotated(
 ) -> bool:
     """
     Iterates through the list of file paths, parses the files and checks if all
-    functions and classes in the files are type-annotated.
+    functions and classes in the files have type hints.
     Parameters
     ----------
         file_list: List[str] - Filenames to be checked by
@@ -31,7 +31,7 @@ def check_annotated(
                                 not checked for type hints presence
     Returns
     ----------
-        True if all files are type-annotated.
+        True if all files have type hints.
     """
     result = True
     for filename in file_list:
@@ -58,7 +58,7 @@ def parse_arguments() -> argparse.Namespace:
     """
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "filenames", help="Files to be checked by annotation_checker.", nargs="+"
+        "filenames", help="Files to be checked by type_hint_checker.", nargs="+"
     )
     parser.add_argument(
         "--exit_zero",
@@ -126,13 +126,13 @@ def filter_files(files: List[str], exclude_pattern: str) -> List[str]:
 
 
 def main() -> None:
-    """Reads the command line arguments and runs the annotation_checker"""
+    """Reads the command line arguments and runs the type_hint_checker"""
     args = parse_arguments()
     logger.setLevel(args.log_level)
     logger.debug(vars(args))
     files = filter_files(files=args.filenames, exclude_pattern=args.exclude_files)
     logger.debug("Files: %s", files)
-    exit_code = 1 - check_annotated(
+    exit_code = 1 - check_type_hints(
         files,
         exclude_parameters=args.exclude_parameters,
         exclude_by_name=args.exclude_by_name,
