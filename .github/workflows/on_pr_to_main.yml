@@ -34,7 +34,7 @@ jobs:
       uses: pypa/gh-action-pypi-publish@release/v1
       with:
         repository-url: https://test.pypi.org/legacy/
-  test_pre_commit_from_tag:
+  test_pre_commit_from_branch:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false

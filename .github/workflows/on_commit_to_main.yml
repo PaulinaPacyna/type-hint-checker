@@ -48,7 +48,7 @@ jobs:
           draft: false
           prerelease: false
           generate_release_notes: true
-  test_pre_commit_from_tag:
+  test_pre_commit_from_main:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
