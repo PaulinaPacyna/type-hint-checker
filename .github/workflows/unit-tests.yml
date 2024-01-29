@@ -19,9 +19,9 @@ jobs:
       uses: actions/setup-python@v3
       with:
         python-version: "3.8"
-    - name: Add annotation_checker to PYTHONPATH
+    - name: Add type_hint_checker to PYTHONPATH
       run: |
-        echo "PYTHONPATH=$PYTHONPATH:$PWD/annotation_checker" >> $GITHUB_ENV
+        echo "PYTHONPATH=$PYTHONPATH:$PWD/type_hint_checker" >> $GITHUB_ENV
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
