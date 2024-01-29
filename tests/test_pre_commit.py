@@ -60,7 +60,7 @@ def test_run_all() -> None:
     lines = prepare_output(output)
     assert lines == {
         *RUN_ALL_OUTPUT,
-        "type_hint_checker......................................................."
+        "type_hint_checker........................................................"
         "Failed",
         "- hook id: type_hint_checker",
         "- exit code: 1",
@@ -77,7 +77,7 @@ def test_run_all_not_strict() -> None:
     lines = prepare_output(output)
     assert lines == {
         *RUN_ALL_OUTPUT,
-        "type_hint_checker......................................................."
+        "type_hint_checker........................................................"
         "Passed",
         "- hook id: type_hint_checker",
     }
