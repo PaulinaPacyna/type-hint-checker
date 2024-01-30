@@ -6,32 +6,28 @@ from typing import List, Optional, Union
 
 
 class Checker(ABC):
-    """Checks if an object is correctly type-annotated.
+    """Checks if an object is chas type hints.
     Parameters
     ----------
         exclude_parameters (str): regex specifying which parameters should not be
                                 checked
-        exclude_self (bool): if True, omit type checking for the first parameter in
-                                method
         exclude_by_name: str - Regex specifying names of functions, methods and classes
                                 that should not be checked
     """
 
     def __init__(
         self,
-        exclude_parameters: str = "",
-        exclude_self: bool = False,
+        exclude_parameters: str = "^self$",
         exclude_by_name: str = "",
     ) -> None:
         self._errors = []
         self._exclude_parameters = exclude_parameters
-        self._exclude_self = exclude_self
         self._exclude_by_name = exclude_by_name
 
     @abstractmethod
     def check(self, item: Union[ast.FunctionDef, ast.ClassDef]) -> bool:
         """
-        Returns True if a given function/method is type-annotated according to settings.
+        Returns True if a given function/method has type hints.
         Parameters
         ----------
             item (Union[ast.FunctionDef, ast.ClassDef]): the object to be checked
@@ -42,7 +38,7 @@ class Checker(ABC):
 
     def log_results(self, logger: Logger, filename: Optional[str] = None) -> None:
         """
-        Displays a log message for each incorrectly annotated function or method.
+        Displays a log message for each function or method with type hints.
         Parameters
         ----------
             logger (Logger): logger object that displays the message.
@@ -64,28 +60,13 @@ class Checker(ABC):
         """
         return self._errors
 
-    def _check_if_name_not_excluded(self, name: str) -> bool:
-        """
-        Checks if the function or class should be checked
-        Parameters
-        ----------
-        name (str): name of the function or class
-
-        Returns
-        -------
-            bool - False if the object should not be checked
-        """
-        return not self._exclude_by_name or not re.search(self._exclude_by_name, name)
-
 
 class FunctionChecker(Checker):
-    """Checks if a function is correctly type-annotated.
+    """Checks if a function is has type hints.
     Parameters
     ----------
         exclude_parameters (str): regex specifying which parameters should not be
                                 checked
-        exclude_self (bool): if True, omit type checking for the first parameter in
-                                method
         exclude_by_name: str - Regex specifying names of functions, methods and classes
                                 that should not be checked
     """
@@ -93,59 +74,54 @@ class FunctionChecker(Checker):
     def __init__(
         self,
         exclude_parameters: str = "",
-        exclude_self: bool = False,
         exclude_by_name: str = "",
     ) -> None:
         super().__init__(
             exclude_parameters=exclude_parameters,
-            exclude_self=exclude_self,
             exclude_by_name=exclude_by_name,
         )
 
     def check(self, item: ast.FunctionDef) -> bool:
         """
-        Checks that the function is annotated (arguments and return type).
+        Checks that the function has type hints (parameters and return type).
         Parameters
         ----------
             item (ast.FunctionDef): the function to be checked
         Returns
         -------
         bool
-            True if correctly annotated
+            True if type hints are present
         """
-        if self._check_if_name_not_excluded(item.name):
-            self.__check_args(item)
-            self.__check_return(item)
+        self.__check_parameters(item)
+        self.__check_return(item)
         return not bool(self._errors)
 
-    def __check_args(self, function: ast.FunctionDef) -> None:
-        """Check that the arguments of a function are correctly type-annotated.
+    def __check_parameters(self, function: ast.FunctionDef) -> None:
+        """Check that the parameters of a function has type hints.
         Parameters
         ----------
             function (ast.FunctionDef): the function to be checked
         """
-        args = function.args
-        if self._exclude_self:
-            args = args[1:]
-        for argument in args.args:
-            if not argument.annotation:
-                if self.__check_if_not_excluded(argument.arg):
+        parameters = function.args.args
+        for parameter in parameters:
+            if not parameter.annotation:
+                if self.__check_if_param_should_be_checked(parameter.arg):
                     self._errors.append(
-                        f"Missing annotation for argument {argument.arg} "
+                        f"Missing type hint for parameter {parameter.arg} "
                         f"(function {function.name}), line {function.lineno}"
                     )
 
-    def __check_if_not_excluded(self, argument: str) -> bool:
-        """Returns False if the argument should not be checked.
+    def __check_if_param_should_be_checked(self, parameter: str) -> bool:
+        """Returns True if the parameter should be checked.
         Parameters
         ----------
-            argument (str): - the arguments' name
+            parameter (str): - the parameters' name
         Returns
         ---------
             bool
         """
         return not self._exclude_parameters or not re.search(
-            self._exclude_parameters, argument
+            self._exclude_parameters, parameter
         )
 
     def __check_return(self, function: ast.FunctionDef) -> None:
@@ -157,20 +133,18 @@ class FunctionChecker(Checker):
         """
         if not function.returns:
             self._errors.append(
-                f"Missing return annotation for function {function.name}, "
+                f"Missing return type hint for function {function.name}, "
                 f"line {function.lineno}"
             )
 
 
 class ClassChecker(Checker):
     """
-    Checks if all methods in a given class are correctly type-annotated..
+    Checks if all methods in a given class has type hints.
     Parameters
     ----------
         exclude_parameters (str): regex specifying which parameters should not be
                                 checked
-        exclude_self (bool): if True, omit type checking for the first parameter in
-                                methods
         exclude_by_name: str - Regex specifying names of functions, methods and classes
                                 that should not be checked
     """
@@ -178,33 +152,28 @@ class ClassChecker(Checker):
     def __init__(
         self,
         exclude_parameters: List[str] = (),
-        exclude_self: bool = False,
         exclude_by_name: str = "",
     ) -> None:
         super().__init__(
             exclude_parameters=exclude_parameters,
-            exclude_self=exclude_self,
             exclude_by_name=exclude_by_name,
         )
 
     def check(self, item: ast.ClassDef) -> bool:
         """
-        Checks if all methods in a given class are correctly type-annotated.
+        Checks if all methods in a given class has type hints.
         Parameters
         ----------
             item (ast.FunctionDef): the class to be checked
         Returns
         -------
         bool
-            True if all methods are correctly type-annotated.
+            True if all methods have type hints.
         """
         result = True
-        if not self._check_if_name_not_excluded(item.name):
-            return result
         for method in item.body:
             if isinstance(method, ast.FunctionDef):
                 function_checker = FunctionChecker(
-                    exclude_self=self._exclude_self,
                     exclude_parameters=self._exclude_parameters,
                     exclude_by_name=self._exclude_by_name,
                 )

@@ -3,63 +3,52 @@ import re
 import sys
 from typing import List
 import logging
-import ast
 
-from annotation_checker.checkers import FunctionChecker, ClassChecker
-from annotation_checker.exceptions import IncorrectFileException
+from type_hint_checker.checkers import FunctionChecker, ClassChecker
+from type_hint_checker.file_parser import FileParser
 
-logger = logging.getLogger("annotation_checker")
+logger = logging.getLogger("type_hint_checker")
 logging.basicConfig()
 
 
-def check_annotated(
+def check_type_hints(
     file_list: List[str],
-    exclude_parameters: str = "",
-    exclude_self: bool = False,
+    exclude_parameters: str = "^self$",
     exclude_by_name: str = "",
+    ignore_comment: str = "no-check",
 ) -> bool:
     """
     Iterates through the list of file paths, parses the files and checks if all
-    functions and classes in the files are type-annotated.
+    functions and classes in the files have type hints.
     Parameters
     ----------
         file_list: List[str] - Filenames to be checked by
         exclude_parameters: str - regex specifying which parameters should not be
                             checked
-        exclude_self: bool - if True, omit type checking for the first parameter in
-                            methods
         exclude_by_name: str - Regex specifying names of functions, methods and classes
                             that should not be checked
+        ignore_comment : str - if this phrase appears in the comment, the item is
+                                not checked for type hints presence
     Returns
     ----------
-        True if all files are type-annotated.
+        True if all files have type hints.
     """
     result = True
     for filename in file_list:
-        with open(filename, "r", encoding="utf-8") as file:
-            content = file.read()
-            try:
-                body = ast.parse(content).body
-            except SyntaxError as exc:
-                raise IncorrectFileException(
-                    f"File could not be parsed: {filename}"
-                ) from exc
-            for item in body:
-                if isinstance(item, ast.FunctionDef):
-                    checker = FunctionChecker(
-                        exclude_parameters=exclude_parameters,
-                        exclude_by_name=exclude_by_name,
-                    )
-                elif isinstance(item, ast.ClassDef):
-                    checker = ClassChecker(
-                        exclude_parameters=exclude_parameters,
-                        exclude_self=exclude_self,
-                        exclude_by_name=exclude_by_name,
-                    )
-                else:
-                    continue
-                result = checker.check(item) and result
-                checker.log_results(logger, filename=filename)
+        file = FileParser(
+            filename,
+            excluded_names=exclude_by_name,
+            ignore_comment=ignore_comment,
+        )
+        function_checker = FunctionChecker(exclude_parameters=exclude_parameters)
+        class_checker = ClassChecker(exclude_parameters=exclude_parameters)
+
+        for function in file.functions:
+            result = function_checker.check(function) and result
+            function_checker.log_results(logger, filename=filename)
+        for class_ in file.classes:
+            result = class_checker.check(class_) and result
+            class_checker.log_results(logger, filename=filename)
     return result
 
 
@@ -69,19 +58,12 @@ def parse_arguments() -> argparse.Namespace:
     """
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "filenames", help="Files to be checked by annotation_checker.", nargs="+"
+        "filenames", help="Files to be checked by type_hint_checker.", nargs="+"
     )
     parser.add_argument(
-        "--strict",
-        help="If True and checks fails, exit the program with 1 code.",
-        type=bool,
-        default=False,
-    )
-    parser.add_argument(
-        "--exclude_self",
-        help="If True, omit type checking for the first parameter in methods.",
-        type=bool,
-        default=True,
+        "--exit_zero",
+        action="store_true",
+        help="If this flag is checked, the program always exits with 0 (success) code.",
     )
     parser.add_argument(
         "--exclude_files",
@@ -93,7 +75,7 @@ def parse_arguments() -> argparse.Namespace:
         "--exclude_parameters",
         help="Regex specifying which parameters should not be checked",
         type=str,
-        default="",
+        default="^self$",
     )
     parser.add_argument(
         "--exclude_by_name",
@@ -108,6 +90,13 @@ def parse_arguments() -> argparse.Namespace:
         type=str,
         default="INFO",
         choices=["INFO", "DEBUG"],
+    )
+    parser.add_argument(
+        "--ignore_comment",
+        help="If this phrase appears in the comment, the item is excluded. Default : "
+        "'no-check'",
+        type=str,
+        default="no-check",
     )
 
     args = parser.parse_args()
@@ -137,19 +126,19 @@ def filter_files(files: List[str], exclude_pattern: str) -> List[str]:
 
 
 def main() -> None:
-    """Reads the command line arguments and runs the annotation_checker"""
+    """Reads the command line arguments and runs the type_hint_checker"""
     args = parse_arguments()
     logger.setLevel(args.log_level)
     logger.debug(vars(args))
     files = filter_files(files=args.filenames, exclude_pattern=args.exclude_files)
     logger.debug("Files: %s", files)
-    exit_code = 1 - check_annotated(
+    exit_code = 1 - check_type_hints(
         files,
         exclude_parameters=args.exclude_parameters,
-        exclude_self=args.exclude_self,
         exclude_by_name=args.exclude_by_name,
+        ignore_comment=args.ignore_comment,
     )
-    if args.strict and exit_code:
+    if not args.exit_zero and exit_code:
         sys.exit(exit_code)
 
 

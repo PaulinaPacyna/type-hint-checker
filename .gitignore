@@ -1,5 +1,5 @@
 venv
-annotation_checker.egg-info
+type_hint_checker.egg-info
 build
 .idea
 __pycache__

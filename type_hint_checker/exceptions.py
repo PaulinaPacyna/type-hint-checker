@@ -1,2 +1,2 @@
 class IncorrectFileException(Exception):
-    pass
+    """Incorrect file exception"""

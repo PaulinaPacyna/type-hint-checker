@@ -1,0 +1,10 @@
+repos:
+  - repo: local
+    hooks:
+      - id: type_hint_checker
+        name: type_hint_checker
+        entry: type_hint_checker
+        language: python
+        files: '.py$'
+        args: [--exclude_files=^(?!.*tests/cases).*$]
+        verbose: true
