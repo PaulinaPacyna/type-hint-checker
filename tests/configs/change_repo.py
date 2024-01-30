@@ -2,7 +2,7 @@ import os
 import glob
 
 path = os.getenv("config_path", os.path.join("tests", "configs"))
-rev = os.getenv("rev", "main")
+rev = os.getenv("rev", "latest")
 repo = "https://github.com/PaulinaPacyna/type-hint-checker"
 for file_name in glob.glob(os.path.join(path, "*.yaml")):
     with open(file_name, "r", encoding="utf-8") as file:
