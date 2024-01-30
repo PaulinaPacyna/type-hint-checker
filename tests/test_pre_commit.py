@@ -98,6 +98,7 @@ def prepare_output(output: str) -> Set[str]:
         "This may take a few minutes...",
         "Installing environment for ",
         "Initializing environment for",
+        "The 'rev' field of ",
     ]
     for line in trimmed:
         if not any([phrase in line for phrase in not_needed_phrases]):
