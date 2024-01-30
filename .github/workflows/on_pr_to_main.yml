@@ -52,7 +52,12 @@ jobs:
         uses: actions/setup-python@v3
         with:
           python-version: "${{ matrix.python-version }}"
-      - name: Install dependencies
+      - name: Change configs for tests
+        run: |
+          set -e
+          export rev={{ github.head_ref }}
+          python tests/configs/change_repo.py
+      - name: Install pre commit
         run: |
           set -e
           rm -r type_hint_checker
