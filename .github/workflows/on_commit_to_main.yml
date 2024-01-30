@@ -83,7 +83,7 @@ jobs:
           python -m pytest tests/test_pre_commit.py
 
   test_command_line:
-    needs: publish_to_test_pypi
+    needs: publish_to_pypi
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -112,7 +112,7 @@ jobs:
           python -m pytest tests/test_command_line.py
 
   test_from_pypi:
-    needs: publish_to_test_pypi
+    needs: publish_to_pypi
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
