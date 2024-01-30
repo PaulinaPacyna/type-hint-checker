@@ -47,7 +47,7 @@ jobs:
           release_name: Release v${{ env.VERSION }}
           draft: false
           prerelease: false
-          generate_release_notes: true
+          body: Release v${{ env.VERSION }}
   test_pre_commit_from_main:
     runs-on: ubuntu-latest
     strategy:
