@@ -85,11 +85,21 @@ def test_run_all_not_strict() -> None:
 
 
 def prepare_output(output: str) -> Set[str]:
-    """Prepares the output of the pylint program by splitting the lines, trimming and removing unnecessary output
+    """Prepares the output of the pylint program by splitting the lines, trimming and
+    removing unnecessary output
     Parameters:
         output (str) - output of the command line program"""
     lines = output.split("\n")
     trimmed = [line.strip() for line in lines]
-    result = [line for line in trimmed if "- duration: " not in line]
-
+    result = []
+    not_needed_phrases = [
+        "- duration: ",
+        "Once installed this environment will be reused.",
+        "This may take a few minutes...",
+        "Installing environment for ",
+        "Initializing environment for",
+    ]
+    for line in trimmed:
+        if not any([phrase in line for phrase in not_needed_phrases]):
+            result += [line]
     return set(result)
