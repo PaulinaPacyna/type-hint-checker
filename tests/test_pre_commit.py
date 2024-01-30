@@ -53,9 +53,8 @@ def run_command(command: str) -> subprocess.CompletedProcess:
 
 def test_run_all() -> None:
     """Basic check"""
-    folder = os.getenv("CONFIG_FOLDER", "local")
     process = run_command(
-        f"pre-commit run type_hint_checker --all-files -c tests/configs/{folder}/strict.yaml"
+        "pre-commit run type_hint_checker --all-files -c tests/configs/strict.yaml"
     )
     output = process.stdout
     lines = prepare_output(output)
@@ -71,9 +70,8 @@ def test_run_all() -> None:
 
 def test_run_all_not_strict() -> None:
     """Test if pre-commit doesn't fail when strict=False"""
-    folder = os.getenv("CONFIG_FOLDER", "local")
     process = run_command(
-        f"pre-commit run type_hint_checker --all-files -c tests/configs/{folder}/not-strict.yaml"
+        "pre-commit run type_hint_checker --all-files -c tests/configs/not-strict.yaml"
     )
     output = process.stdout
     lines = prepare_output(output)
