@@ -29,6 +29,8 @@ jobs:
       uses: pypa/gh-action-pypi-publish@release/v1
       with:
         repository-url: https://test.pypi.org/legacy/
+    - name: Wait until it appears under all pypi indexes
+      run: sleep 10
   test_pre_commit_from_branch:
     runs-on: ubuntu-latest
     strategy:
