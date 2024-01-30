@@ -49,7 +49,7 @@ jobs:
       - name: Change configs for tests
         run: |
           set -e
-          export rev={{ github.head_ref }}
+          export rev=${{ github.head_ref }}
           python tests/configs/change_repo.py
       - name: Install pre commit
         run: |
