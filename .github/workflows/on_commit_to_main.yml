@@ -33,6 +33,7 @@ jobs:
   create_github_release:
     name: "Create github release"
     runs-on: "ubuntu-latest"
+    permissions: write-all
     steps:
       - name: Checkout
         uses: actions/checkout@v3
